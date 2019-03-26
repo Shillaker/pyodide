@@ -6,6 +6,8 @@ all: emsdk/.complete
 # We hack the CPU_CORES, because if you use all of the cores on Circle-CI, you
 # run out of memory.
 
+# We force emscripten to use the local LLVM in here by setting LLVM_ROOT in .emscripten
+
 emsdk/.complete:
 	if [ -d emsdk ]; then rm -rf emsdk; fi
 	git clone https://github.com/juj/emsdk.git
@@ -20,6 +22,7 @@ emsdk/.complete:
 	  cd ../.. && \
     cp binaryen/tag-$(EMSCRIPTEN_VERSION)/bin/wasm.js binaryen/tag-$(EMSCRIPTEN_VERSION)_64bit_binaryen/bin && \
 		./emsdk activate --embedded --build=Release sdk-tag-$(EMSCRIPTEN_VERSION)-64bit binaryen-tag-$(EMSCRIPTEN_VERSION)-64bit && \
+		sed -e 's/LLVM_ROOT.*$/LLVM_ROOT=os.environ[\"HOME\"] + "\/faasm\/toolchain\/bin"/' .emscripten > .emscripten.tmp && mv .emscripten.tmp .emscripten
     touch .complete \
 	)
 

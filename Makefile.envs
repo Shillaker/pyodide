@@ -8,6 +8,8 @@ export EM_CACHE = $(PYODIDE_ROOT)/emsdk/emsdk/.emscripten_cache
 export EMSCRIPTEN = $(PYODIDE_ROOT)/emsdk/emsdk/emscripten/tag-$(EMSCRIPTEN_VERSION)
 export BINARYEN_ROOT = $(PYODIDE_ROOT)/emsdk/emsdk/binaryen/tag-$(EMSCRIPTEN_VERSION)_64bit_binaryen
 
+export EMCC_WASM_BACKEND=1
+
 export PYVERSION=3.7.0
 export PYMINOR=$(basename $(PYVERSION))
 export HOSTPYTHONROOT=$(PYODIDE_ROOT)/cpython/build/$(PYVERSION)/host
@@ -17,13 +19,14 @@ export PYTHONINCLUDE=$(PYODIDE_ROOT)/cpython/installs/python-$(PYVERSION)/includ
 
 export PYODIDE_PACKAGE_ABI=1
 
+# Note, host here is hard-coded in patch files
+export CONFIG_FLAGS=\
+  --target=wasm32 \
+  --host=asmjs-unknown-emscripten \
+  --build=wasm32
+
 export SIDE_LDFLAGS=\
 	-O3 \
-  -s "BINARYEN_METHOD='native-wasm'" \
-	-Werror \
-  -s SIDE_MODULE=1 \
-	-s WASM=1 \
-  -s "BINARYEN_TRAP_MODE='clamp'" \
-  --memory-init-file 0 \
-  -s LINKABLE=1 \
-  -s EXPORT_ALL=1
+	--export-all \
+	--import-memory \
+	--import-table \
