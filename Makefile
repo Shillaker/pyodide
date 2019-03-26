@@ -12,9 +12,8 @@ CLAPACK=CLAPACK/CLAPACK-WA/lapack_WA.bc
 CC=emcc
 CXX=em++
 OPTFLAGS=-O3
-CFLAGS=$(OPTFLAGS) -g -I$(PYTHONINCLUDE) -Wno-warn-absolute-paths
+CFLAGS=$(OPTFLAGS) -g -I$(PYTHONINCLUDE) -Wno-warn-absolute-paths --sysroot=$(WASM_SYSROOT)
 CXXFLAGS=$(CFLAGS) -std=c++14
-
 
 LDFLAGS=\
 	-O3 \
@@ -24,7 +23,6 @@ LDFLAGS=\
   -s "BINARYEN_METHOD='native-wasm'" \
   -s TOTAL_MEMORY=1073741824 \
   -s ALLOW_MEMORY_GROWTH=1 \
-	-s MAIN_MODULE=1 \
   -s LINKABLE=1 \
   -s EXPORT_ALL=1 \
 	-s EXPORTED_FUNCTIONS='["___cxa_guard_acquire", "__ZNSt3__28ios_base4initEPv"]' \

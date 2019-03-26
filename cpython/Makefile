@@ -14,6 +14,8 @@ TARBALL=$(ROOT)/downloads/Python-$(PYVERSION).tgz
 URL=https://www.python.org/ftp/python/$(PYVERSION)/Python-$(PYVERSION).tgz
 LIB=libpython$(PYMINOR).a
 
+export CFLAGS=--sysroot=$(WASM_SYSROOT)
+export CXXFLAGS=$(CFLAGS) -std=c++14
 
 ZLIBVERSION = 1.2.11
 ZLIBTARBALL=$(ROOT)/downloads/zlib-$(ZLIBVERSION).tar.gz

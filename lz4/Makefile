@@ -9,6 +9,8 @@ SRC=$(ROOT)/lz4-$(LZ4VERSION)
 TARBALL=$(ROOT)/downloads/lz4-$(LZ4VERSION).tgz
 URL=https://github.com/lz4/lz4/archive/v$(LZ4VERSION).tar.gz
 
+export CFLAGS=--sysroot=$(WASM_SYSROOT)
+export CXXFLAGS=$(CFLAGS) -std=c++14
 
 all: $(SRC)/lib/liblz4.a
 

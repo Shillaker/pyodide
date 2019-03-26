@@ -9,6 +9,7 @@ export EMSCRIPTEN = $(PYODIDE_ROOT)/emsdk/emsdk/emscripten/tag-$(EMSCRIPTEN_VERS
 export BINARYEN_ROOT = $(PYODIDE_ROOT)/emsdk/emsdk/binaryen/tag-$(EMSCRIPTEN_VERSION)_64bit_binaryen
 
 export EMCC_WASM_BACKEND=1
+export WASM_SYSROOT = $(HOME)/faasm/toolchain/sysroot
 
 export PYVERSION=3.7.0
 export PYMINOR=$(basename $(PYVERSION))
@@ -26,7 +27,8 @@ export CONFIG_FLAGS=\
   --build=wasm32
 
 export SIDE_LDFLAGS=\
-	-O3 \
-	--export-all \
-	--import-memory \
-	--import-table \
+	-s "BINARYEN_METHOD='native-wasm'" \
+	-Werror \
+  -s "BINARYEN_TRAP_MODE='clamp'" \
+  -s LINKABLE=1 \
+  -s EXPORT_ALL=1
