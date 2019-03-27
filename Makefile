@@ -12,7 +12,7 @@ CLAPACK=CLAPACK/CLAPACK-WA/lapack_WA.bc
 CC=emcc
 CXX=em++
 OPTFLAGS=-O3
-CFLAGS=$(OPTFLAGS) -g -I$(PYTHONINCLUDE) -Wno-warn-absolute-paths --sysroot=$(WASM_SYSROOT)
+CFLAGS=$(OPTFLAGS) -g -I$(PYTHONINCLUDE) -Wno-warn-absolute-paths
 CXXFLAGS=$(CFLAGS) -std=c++14
 
 LDFLAGS=\
