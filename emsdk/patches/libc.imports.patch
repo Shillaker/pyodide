@@ -4,6 +4,13 @@
  setjmp
  longjmp
  
-+# Placeholder for extras
-+__syscall
++# Dynamic linking
++dlopen
++dlsym
++dlclose
++dlerror
 +
++# Misc
++ioctl
++
+
