@@ -1,0 +1,9 @@
+--- a/emsdk/upstream/4138/sysroot/lib/libc.imports	2019-03-28 14:37:04.828279429 +0000
++++ b/emsdk/upstream/4138/sysroot/lib/libc.imports	2019-03-28 14:37:04.828279429 +0000
+@@ -30,3 +30,5 @@
+ setjmp
+ longjmp
+ 
++# Placeholder for extras
++__syscall
++

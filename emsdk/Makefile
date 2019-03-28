@@ -1,25 +1,18 @@
 PYODIDE_ROOT=$(abspath ..)
 include ../Makefile.envs
 
-all: emsdk/.complete
+all: emsdk/.patched
 
-# We hack the CPU_CORES, because if you use all of the cores on Circle-CI, you
-# run out of memory.
+emsdk/.patched: emsdk/.built
+	(cat patches/*.patch | patch -p1);
+	touch emsdk/.patched
 
-# We force emscripten to use the local LLVM in here by setting LLVM_ROOT in .emscripten
-# sed -e 's/LLVM_ROOT.*$/LLVM_ROOT=os.environ[\"HOME\"] + "\/faasm\/toolchain\/bin"/' .emscripten > .emscripten.tmp && mv .emscripten.tmp .emscripten
-
-emsdk/.complete:
+emsdk/.built:
 	if [ -d emsdk ]; then rm -rf emsdk; fi
-	git clone git@github.com:emscripten-core/emsdk.git	
-	( \
-		cd emsdk && \
-		./emsdk install $(EMSCRIPTEN_SDK) && \
-		./emsdk activate $(EMSCRIPTE_SDK) && \
-		cd .. && \
-		cat extra_libc.imports >> emsdk/upstream/$(EMSCRIPTEN_VERSION)/sysroot/lib/libc.imports && \
-    touch .complete \
-	)
+	git clone git@github.com:emscripten-core/emsdk.git
+	cd emsdk &&	./emsdk install $(EMSCRIPTEN_SDK)
+	cd emsdk &&	./emsdk activate $(EMSCRIPTEN_SDK) 
+	touch emsdk/.built
 
 clean:
 	rm -rf emsdk
