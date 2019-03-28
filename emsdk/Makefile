@@ -11,18 +11,13 @@ all: emsdk/.complete
 
 emsdk/.complete:
 	if [ -d emsdk ]; then rm -rf emsdk; fi
-	git clone https://github.com/juj/emsdk.git
-	sed -i -e "s#CPU_CORES = max(multiprocessing.cpu_count()-1, 1)#CPU_CORES = 3#g" emsdk/emsdk
+	git clone git@github.com:emscripten-core/emsdk.git	
 	( \
 		cd emsdk && \
-		./emsdk install --build=Release sdk-tag-$(EMSCRIPTEN_VERSION)-64bit binaryen-tag-$(EMSCRIPTEN_VERSION)-64bit && \
+		./emsdk install $(EMSCRIPTEN_SDK) && \
+		./emsdk activate $(EMSCRIPTE_SDK) && \
 		cd .. && \
-		(cat patches/*.patch | patch -p1) ; \
-		cd emsdk/binaryen/tag-$(EMSCRIPTEN_VERSION)_64bit_binaryen/ && \
-    make && \
-	  cd ../.. && \
-    cp binaryen/tag-$(EMSCRIPTEN_VERSION)/bin/wasm.js binaryen/tag-$(EMSCRIPTEN_VERSION)_64bit_binaryen/bin && \
-		./emsdk activate --embedded --build=Release sdk-tag-$(EMSCRIPTEN_VERSION)-64bit binaryen-tag-$(EMSCRIPTEN_VERSION)-64bit && \
+		cat extra_libc.imports >> emsdk/upstream/$(EMSCRIPTEN_VERSION)/sysroot/lib/libc.imports && \
     touch .complete \
 	)
 
