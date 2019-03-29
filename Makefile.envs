@@ -1,5 +1,16 @@
+export EMCC_WASM_BACKEND=1
 export EMSCRIPTEN_VERSION=4138
 export EMSCRIPTEN_SDK=sdk-upstream-$(EMSCRIPTEN_VERSION)-64bit
+
+#export WASM_ROOT=$(PYODIDE_ROOT)/emsdk/emsdk/upstream/4138
+#export CC=$(WASM_ROOT)/bin/wasm32-clang
+#export CXX=$(WASM_ROOT)/bin/wasm32-clang++
+#export AR=$(WASM_ROOT)/bin/llvm-ar
+#export RANLIB=$(WASM_ROOT)/bin/llvm-ranlib
+
+#export WASM_FLAGS="--sysroot $(WASM_ROOT)/sysroot"
+#export CFLAGS="$(WASM_FLAGS) fuckfoo"
+#export CXXFLAGS="$(WASM_FLAGS) shitbar"
 
 export PYVERSION=3.7.0
 export PYMINOR=$(basename $(PYVERSION))
@@ -13,6 +24,6 @@ export PYODIDE_PACKAGE_ABI=1
 export SIDE_LDFLAGS=\
 	-s "BINARYEN_METHOD='native-wasm'" \
 	-Werror \
-  -s "BINARYEN_TRAP_MODE='clamp'" \
-  -s LINKABLE=1 \
-  -s EXPORT_ALL=1
+    -s "BINARYEN_TRAP_MODE='clamp'" \
+    -s LINKABLE=1 \
+    -s EXPORT_ALL=1

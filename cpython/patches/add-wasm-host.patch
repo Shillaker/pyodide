@@ -8,7 +8,7 @@ index ba37cf99e2..d772f33065 100755
    kopensolaris*-gnu* | cloudabi*-eabi* | \
 -  storm-chaos* | os2-emx* | rtmk-nova*)
 +  storm-chaos* | os2-emx* | rtmk-nova* | \
-+  emscripten)
++  wasm)
      os=-$maybe_os
      basic_machine=`echo "$1" | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\1/'`
      ;;
@@ -16,7 +16,7 @@ index ba37cf99e2..d772f33065 100755
  	| alpha64-* | alpha64ev[4-8]-* | alpha64ev56-* | alpha64ev6[78]-* \
  	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* | arceb-* \
  	| arm-*  | armbe-* | armle-* | armeb-* | armv*-* \
-+  | asmjs \
++  | wasm32 \
  	| avr-* | avr32-* \
  	| ba-* \
  	| be32-* | be64-* \
@@ -24,7 +24,7 @@ index ba37cf99e2..d772f33065 100755
  			;;
  		esac
  		;;
-+	-emscripten)
++	-wasm)
 +		;;
  	-nacl*)
  		;;
@@ -37,7 +37,7 @@ index e0389649ae..e6ab1613cf 100755
  	*-*-cygwin*)
  		ac_sys_system=Cygwin
  		;;
-+	asmjs-*-*)
++	wasm32-*-*)
 +		ac_sys_system=Emscripten
 +		;;
  	*)
@@ -47,7 +47,7 @@ index e0389649ae..e6ab1613cf 100755
  	*-*-cygwin*)
  		_host_cpu=
  		;;
-+	asmjs-*-*)
++	wasm32-*-*)
 +		_host_cpu=
 +		;;
  	*)
@@ -61,7 +61,7 @@ index b5beb08574..8051e5a8ed 100644
  	*-*-cygwin*)
  		ac_sys_system=Cygwin
  		;;
-+	asmjs-*-*)
++	wasm32-*-*)
 +		ac_sys_system=Emscripten
 +		;;
  	*)
@@ -71,7 +71,7 @@ index b5beb08574..8051e5a8ed 100644
  	*-*-cygwin*)
  		_host_cpu=
  		;;
-+	asmjs-*-*)
++	wasm32-*-*)
 +		_host_cpu=
 +		;;
  	*)

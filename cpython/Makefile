@@ -3,6 +3,9 @@ include ../Makefile.envs
 
 ROOT=$(abspath .)
 
+CONF_BUILD=wasm32
+CONF_HOST=wasm32-unknown-wasm
+
 HOSTINSTALL=$(ROOT)/build/$(PYVERSION)/host
 HOSTBUILD=$(HOSTINSTALL)/Python-$(PYVERSION)
 HOSTPYTHON=$(HOSTINSTALL)/bin/python3$(EXE)
@@ -82,7 +85,7 @@ $(BUILD)/Makefile: $(BUILD)/.patched $(ZLIBBUILD)/.patched
 	cp config.site $(BUILD)/
 	( \
 		cd $(BUILD); \
-		CONFIG_SITE=./config.site READELF=true emconfigure ./configure --without-pymalloc --disable-shared --disable-ipv6 --without-gcc --host=asmjs-unknown-emscripten --build=$(shell $(BUILD)/config.guess) --prefix=$(INSTALL) ; \
+		CONFIG_SITE=./config.site READELF=true emconfigure ./configure --without-pymalloc --disable-shared --disable-ipv6 --without-gcc --host=$(CONF_HOST) --build=$(CONF_BUILD) --prefix=$(INSTALL) ; \
 	)
 
 
