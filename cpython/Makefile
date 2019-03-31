@@ -25,17 +25,17 @@ ZLIBURL=https://zlib.net/zlib-1.2.11.tar.gz
 
 all: $(INSTALL)/lib/$(LIB)
 
+# Sets up the host build (run once)
+.PHONY: host
+host: $(HOSTPYTHON) $(HOSTPGEN) $(BUILD)/.patched $(ZLIBBUILD)/.patched
 
-$(INSTALL)/lib/$(LIB): $(BUILD)/$(LIB)
-	( \
-		cd $(BUILD); \
-		sed -i -e 's/libinstall:.*/libinstall:/' Makefile; \
-		touch $(BUILD)/$(LIB) ; \
-		emmake make HOSTPYTHON=$(HOSTPYTHON) PYTHON_FOR_BUILD=$(HOSTPYTHON) CROSS_COMPILE=yes inclinstall libinstall $(LIB) && \
-		cp $(LIB) $(INSTALL)/lib/ && \
-		cp $(HOSTINSTALL)/lib/python$(PYMINOR)/`$(HOSTPYTHON) -c "import sysconfig; print(sysconfig._get_sysconfigdata_name())"`.py $(INSTALL)/lib/python$(PYMINOR)/_sysconfigdata__emscripten_.py; \
-		sed -i -e 's#'"$(PYODIDE_ROOT)"'##g' $(INSTALL)/lib/python$(PYMINOR)/_sysconfigdata__emscripten_.py; \
-	)
+# Configures the build
+.PHONY: configure
+configure: $(BUILD)/Makefile
+
+# Runs the build 
+.PHONY: build
+build: $(INSTALL)/lib/$(LIB)
 
 
 clean:
@@ -43,6 +43,45 @@ clean:
 	-rm -fr $(BUILD)
 	-rm -fr $(INSTALL)
 
+# ---------------------------------
+# WASM BUILD
+# ---------------------------------
+
+# Build libs
+$(INSTALL)/lib/$(LIB): $(BUILD)/$(LIB)
+	( \
+		cd $(BUILD); \
+		sed -i -e 's/libinstall:.*/libinstall:/' Makefile; \
+		touch $(BUILD)/$(LIB) ; \
+		emmake make -j 4 HOSTPYTHON=$(HOSTPYTHON) PYTHON_FOR_BUILD=$(HOSTPYTHON) CROSS_COMPILE=yes inclinstall libinstall $(LIB) && \
+		cp $(LIB) $(INSTALL)/lib/ && \
+		cp $(HOSTINSTALL)/lib/python$(PYMINOR)/`$(HOSTPYTHON) -c "import sysconfig; print(sysconfig._get_sysconfigdata_name())"`.py $(INSTALL)/lib/python$(PYMINOR)/_sysconfigdata__emscripten_.py; \
+		sed -i -e 's#'"$(PYODIDE_ROOT)"'##g' $(INSTALL)/lib/python$(PYMINOR)/_sysconfigdata__emscripten_.py; \
+	)
+
+# Configure
+$(BUILD)/Makefile:
+	cp config.site $(BUILD)/
+	( \
+		cd $(BUILD); \
+		CONFIG_SITE=./config.site READELF=true emconfigure ./configure --without-pymalloc --disable-shared --disable-ipv6 --without-gcc --host=$(CONF_HOST) --build=$(CONF_BUILD) --prefix=$(INSTALL) ; \
+	)
+
+# Build core
+$(BUILD)/$(LIB): $(BUILD)/Makefile Setup.local
+	cp Setup.local $(BUILD)/Modules/
+	cat pyconfig.undefs.h >> $(BUILD)/pyconfig.h
+	( \
+		cp build/$(PYVERSION)/host/lib/python$(PYMINOR)/`$(HOSTPYTHON) -c "import sysconfig; print(sysconfig._get_sysconfigdata_name())"`.py build/$(PYVERSION)/Python-$(PYVERSION)/Lib/_sysconfigdata__emscripten_.py; \
+		cd $(BUILD); \
+		emmake make -j 4 HOSTPYTHON=$(HOSTPYTHON) HOSTPGEN=$(HOSTPGEN) CROSS_COMPILE=yes $(LIB) \
+	)
+	touch $(BUILD)/$(LIB)
+
+
+# ----------------------------------
+# DOWNLOAD AND HOST BUILD (RUN ONCE)
+# ----------------------------------
 
 $(TARBALL):
 	[ -d $(ROOT)/downloads ] || mkdir $(ROOT)/downloads
@@ -53,6 +92,13 @@ $(TARBALL):
 $(ZLIBTARBALL):
 	[ -d $(ROOT)/downloads ] || mkdir $(ROOT)/downloads
 	wget -q -O $@ $(ZLIBURL)
+
+
+$(ZLIBBUILD)/.patched: $(ZLIBTARBALL)
+	[ -d $(ROOT)/build ] || (mkdir $(ROOT)/build)
+	tar -C $(ROOT)/build/ -xf $(ROOT)/downloads/zlib-1.2.11.tar.gz
+	cat patches/zlib/*.patch | (cd $(ZLIBBUILD) ; patch -p1)
+	touch $@
 
 
 $(HOSTPYTHON) $(HOSTPGEN): $(TARBALL)
@@ -67,34 +113,10 @@ $(HOSTPYTHON) $(HOSTPGEN): $(TARBALL)
 		make distclean \
 	)
 
-
+# Patches the downloaded code
 $(BUILD)/.patched: $(TARBALL)
 	[ -d $(BUILD) ] || (mkdir -p $(dir $(BUILD)); tar -C $(dir $(BUILD)) -xf $(TARBALL))
 	cat patches/*.patch | (cd $(BUILD) ; patch -p1)
 	touch $@
 
 
-$(ZLIBBUILD)/.patched: $(ZLIBTARBALL)
-	[ -d $(ROOT)/build ] || (mkdir $(ROOT)/build)
-	tar -C $(ROOT)/build/ -xf $(ROOT)/downloads/zlib-1.2.11.tar.gz
-	cat patches/zlib/*.patch | (cd $(ZLIBBUILD) ; patch -p1)
-	touch $@
-
-
-$(BUILD)/Makefile: $(BUILD)/.patched $(ZLIBBUILD)/.patched
-	cp config.site $(BUILD)/
-	( \
-		cd $(BUILD); \
-		CONFIG_SITE=./config.site READELF=true emconfigure ./configure --without-pymalloc --disable-shared --disable-ipv6 --without-gcc --host=$(CONF_HOST) --build=$(CONF_BUILD) --prefix=$(INSTALL) ; \
-	)
-
-
-$(BUILD)/$(LIB): $(BUILD)/Makefile $(HOSTPYTHON) $(HOSTPGEN) Setup.local
-	cp Setup.local $(BUILD)/Modules/
-	cat pyconfig.undefs.h >> $(BUILD)/pyconfig.h
-	( \
-		cp build/$(PYVERSION)/host/lib/python$(PYMINOR)/`$(HOSTPYTHON) -c "import sysconfig; print(sysconfig._get_sysconfigdata_name())"`.py build/$(PYVERSION)/Python-$(PYVERSION)/Lib/_sysconfigdata__emscripten_.py; \
-		cd $(BUILD); \
-		emmake make HOSTPYTHON=$(HOSTPYTHON) HOSTPGEN=$(HOSTPGEN) CROSS_COMPILE=yes $(LIB) \
-	)
-	touch $(BUILD)/$(LIB)
