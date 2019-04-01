@@ -23,7 +23,7 @@ ZLIBBUILD=$(ROOT)/build/zlib-$(ZLIBVERSION)
 ZLIBURL=https://zlib.net/zlib-1.2.11.tar.gz
 
 
-all: $(INSTALL)/lib/$(LIB)
+all: host configure build
 
 # Sets up the host build (run once)
 .PHONY: host

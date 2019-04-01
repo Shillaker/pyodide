@@ -1,9 +1,11 @@
---- a/emsdk/upstream/4138/sysroot/lib/libc.imports	2019-03-28 14:37:04.828279429 +0000
-+++ b/emsdk/upstream/4138/sysroot/lib/libc.imports	2019-03-28 14:37:04.828279429 +0000
-@@ -30,3 +30,5 @@
+--- a/emsdk/upstream/4583/sysroot/lib/libc.imports	2019-04-01 09:45:26.467798904 +0100
++++ b/emsdk/upstream/4583/sysroot/lib/libc.imports	2019-04-01 09:46:08.527195096 +0100
+
+@@ -29,3 +29,40 @@
+ # Part of musl we still don't compile for wasm
  setjmp
  longjmp
- 
++
 +# Dynamic linking
 +dlopen
 +dlsym
@@ -40,4 +42,3 @@
 +setrlimit
 +__copy_tls
 +
-

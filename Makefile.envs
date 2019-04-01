@@ -1,5 +1,5 @@
 export EMCC_WASM_BACKEND=1
-export EMSCRIPTEN_VERSION=4138
+export EMSCRIPTEN_VERSION=4583
 export EMSCRIPTEN_SDK=sdk-upstream-$(EMSCRIPTEN_VERSION)-64bit
 
 #export WASM_ROOT=$(PYODIDE_ROOT)/emsdk/emsdk/upstream/4138
