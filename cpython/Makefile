@@ -3,9 +3,6 @@ include ../Makefile.envs
 
 ROOT=$(abspath .)
 
-# We need to make sure the host python build the first on the path
-PATH:=$(ROOT)/build/$(PYVERSION)/host/bin:$(PATH)
-
 CONF_BUILD=wasm32
 CONF_HOST=wasm32-unknown-wasm
 
@@ -64,7 +61,6 @@ $(INSTALL)/lib/$(LIB): $(BUILD)/$(LIB)
 
 # Configure
 $(BUILD)/Makefile:
-	echo "PATH: $(PATH)" 
 	cp config.site $(BUILD)/
 	( \
 		cd $(BUILD); \
