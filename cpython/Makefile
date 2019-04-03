@@ -64,7 +64,7 @@ $(BUILD)/Makefile:
 	cp config.site $(BUILD)/
 	( \
 		cd $(BUILD); \
-		CONFIG_SITE=./config.site READELF=true emconfigure ./configure --without-pymalloc --disable-shared --disable-ipv6 --without-gcc --host=$(CONF_HOST) --build=$(CONF_BUILD) --prefix=$(INSTALL) ; \
+		CONFIG_SITE=./config.site READELF=true emconfigure ./configure --with-pydebug --without-pymalloc --disable-shared --disable-ipv6 --without-gcc --host=$(CONF_HOST) --build=$(CONF_BUILD) --prefix=$(INSTALL) ; \
 	)
 
 # Build core

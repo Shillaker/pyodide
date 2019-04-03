@@ -1,11 +1,7 @@
 PYODIDE_ROOT=$(abspath ..)
 include ../Makefile.envs
 
-all: emsdk/.patched
-
-emsdk/.patched: emsdk/.built
-	(cat patches/*.patch | patch -p1);
-	touch emsdk/.patched
+all: emsdk/.built
 
 emsdk/.built:
 	if [ -d emsdk ]; then rm -rf emsdk; fi
