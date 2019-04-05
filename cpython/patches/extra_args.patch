@@ -1,7 +1,45 @@
+diff --git a/Objects/descrobject.c b/Objects/descrobject.c
+index 6014039..470b6ed 100644
+--- a/Objects/descrobject.c
++++ b/Objects/descrobject.c
+@@ -882,7 +882,7 @@ mappingproxy_values(mappingproxyobject *pp)
+ }
+
+ static PyObject *
+-mappingproxy_items(mappingproxyobject *pp)
++mappingproxy_items(mappingproxyobject *pp, void *Py_UNUSED(ignored))
+ {
+     _Py_IDENTIFIER(items);
+     return _PyObject_CallMethodId(pp->mapping, &PyId_items, NULL);
 diff --git a/Modules/_threadmodule.c b/Modules/_threadmodule.c
 index f594bda..70543c7 100644
 --- a/Modules/_threadmodule.c
 +++ b/Modules/_threadmodule.c
+@@ -163,7 +163,7 @@ and the return value reflects whether the lock is acquired.\n\
+ The blocking operation is interruptible.");
+ 
+ static PyObject *
+-lock_PyThread_release_lock(lockobject *self)
++lock_PyThread_release_lock(lockobject *self, void *Py_UNUSED(ignored))
+ {
+     /* Sanity check: the lock must be locked */
+     if (!self->locked) {
+@@ -242,14 +242,14 @@ static PyMemberDef func_memberlist[] = {
+  };
+
+  static PyObject *
+ -func_get_code(PyFunctionObject *op)
+ +func_get_code(PyFunctionObject *op, void *Py_UNUSED(ignored))
+  {
+      Py_INCREF(op->func_code);
+      return op->func_code;
+  }
+
+  static int
+ -func_set_code(PyFunctionObject *op, PyObject *value)
+ +func_set_code(PyFunctionObject *op, PyObject *value, void *Py_UNUSED(ignored))
+  {
+      Py_ssize_t nfree, nclosure;
 @@ -1117,7 +1117,7 @@ A subthread can use this function to interrupt the main thread."
  static lockobject *newlockobject(void);
  
