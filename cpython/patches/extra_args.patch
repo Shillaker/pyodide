@@ -1,3 +1,25 @@
+diff --git a/Python/sysmodule.c b/Python/sysmodule.c
+index d68572d..8a0e18e 100644
+--- a/Python/sysmodule.c
++++ b/Python/sysmodule.c
+@@ -370,7 +370,7 @@ implementation."
+ );
+
+ static PyObject *
+-sys_getfilesystemencoding(PyObject *self)
++sys_getfilesystemencoding(PyObject *self, void *Py_UNUSED(ignored))
+ {
+     if (Py_FileSystemDefaultEncoding)
+         return PyUnicode_FromString(Py_FileSystemDefaultEncoding);
+@@ -387,7 +387,7 @@ operating system filenames."
+ );
+
+ static PyObject *
+-sys_getfilesystemencodeerrors(PyObject *self)
++sys_getfilesystemencodeerrors(PyObject *self, void *Py_UNUSED(ignored))
+ {
+     if (Py_FileSystemDefaultEncodeErrors)
+         return PyUnicode_FromString(Py_FileSystemDefaultEncodeErrors);
 diff --git a/Objects/descrobject.c b/Objects/descrobject.c
 index 6014039..470b6ed 100644
 --- a/Objects/descrobject.c
@@ -62,15 +84,37 @@ diff --git a/Objects/dictobject.c b/Objects/dictobject.c
 index 7a1bceb..057aba8 100644
 --- a/Objects/dictobject.c
 +++ b/Objects/dictobject.c
-@@ -3052,7 +3052,7 @@ PyDoc_STRVAR(copy__doc__,
- 
+@@ -3051,9 +3051,9 @@ PyDoc_STRVAR(copy__doc__,
+ "D.copy() -> a shallow copy of D");
+
  /* Forward */
- static PyObject *dictkeys_new(PyObject *);
+-static PyObject *dictkeys_new(PyObject *);
++static PyObject *dictkeys_new(PyObject *, void *);
 -static PyObject *dictitems_new(PyObject *);
 +static PyObject *dictitems_new(PyObject *, void *);
- static PyObject *dictvalues_new(PyObject *);
- 
+-static PyObject *dictvalues_new(PyObject *);
++static PyObject *dictvalues_new(PyObject *, void *);
+
  PyDoc_STRVAR(keys__doc__,
+              "D.keys() -> a set-like object providing a view on D's keys");
+@@ -3361,7 +3361,7 @@ dictiter_traverse(dictiterobject *di, visitproc visit, void *arg)
+ }
+
+ static PyObject *
+-dictiter_len(dictiterobject *di)
++dictiter_len(dictiterobject *di, void *Py_UNUSED(ignored))
+ {
+     Py_ssize_t len = 0;
+     if (di->di_dict != NULL && di->di_used == di->di_dict->ma_used)
+@@ -4092,7 +4092,7 @@ PyTypeObject PyDictKeys_Type = {
+ };
+
+ static PyObject *
+-dictkeys_new(PyObject *dict)
++dictkeys_new(PyObject *dict, void *Py_UNUSED(ignored))
+ {
+     return _PyDictView_New(dict, &PyDictKeys_Type);
+ }
 @@ -4182,7 +4182,7 @@ PyTypeObject PyDictItems_Type = {
  };
  
@@ -79,6 +123,15 @@ index 7a1bceb..057aba8 100644
 +dictitems_new(PyObject *dict, void *Py_UNUSED(ignored))
  {
      return _PyDictView_New(dict, &PyDictItems_Type);
+ }
+@@ -4247,7 +4247,7 @@ PyTypeObject PyDictValues_Type = {
+ };
+
+ static PyObject *
+-dictvalues_new(PyObject *dict)
++dictvalues_new(PyObject *dict, void *Py_UNUSED(ignored))
+ {
+     return _PyDictView_New(dict, &PyDictValues_Type);
  }
 diff --git a/Objects/fileobject.c b/Objects/fileobject.c
 index 0f71944..456471b 100644
