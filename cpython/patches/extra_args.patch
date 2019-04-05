@@ -29,7 +29,7 @@ index 7a1bceb..057aba8 100644
  /* Forward */
  static PyObject *dictkeys_new(PyObject *);
 -static PyObject *dictitems_new(PyObject *);
-+static PyObject *dictitems_new(PyObject *, , void *);
++static PyObject *dictitems_new(PyObject *, void *);
  static PyObject *dictvalues_new(PyObject *);
  
  PyDoc_STRVAR(keys__doc__,
