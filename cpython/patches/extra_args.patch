@@ -1,0 +1,98 @@
+diff --git a/Modules/_threadmodule.c b/Modules/_threadmodule.c
+index f594bda..70543c7 100644
+--- a/Modules/_threadmodule.c
++++ b/Modules/_threadmodule.c
+@@ -1117,7 +1117,7 @@ A subthread can use this function to interrupt the main thread."
+ static lockobject *newlockobject(void);
+ 
+ static PyObject *
+-thread_PyThread_allocate_lock(PyObject *self)
++thread_PyThread_allocate_lock(PyObject *self, void *Py_UNUSED(ignored))
+ {
+     return (PyObject *) newlockobject();
+ }
+@@ -1130,7 +1130,7 @@ Create a new lock object. See help(type(threading.Lock())) for\n\
+ information about locks.");
+ 
+ static PyObject *
+-thread_get_ident(PyObject *self)
++thread_get_ident(PyObject *self, void *Py_UNUSED(ignored))
+ {
+     unsigned long ident = PyThread_get_thread_ident();
+     if (ident == PYTHREAD_INVALID_THREAD_ID) {
+diff --git a/Objects/dictobject.c b/Objects/dictobject.c
+index 7a1bceb..057aba8 100644
+--- a/Objects/dictobject.c
++++ b/Objects/dictobject.c
+@@ -3052,7 +3052,7 @@ PyDoc_STRVAR(copy__doc__,
+ 
+ /* Forward */
+ static PyObject *dictkeys_new(PyObject *);
+-static PyObject *dictitems_new(PyObject *);
++static PyObject *dictitems_new(PyObject *, , void *);
+ static PyObject *dictvalues_new(PyObject *);
+ 
+ PyDoc_STRVAR(keys__doc__,
+@@ -4182,7 +4182,7 @@ PyTypeObject PyDictItems_Type = {
+ };
+ 
+ static PyObject *
+-dictitems_new(PyObject *dict)
++dictitems_new(PyObject *dict, void *Py_UNUSED(ignored))
+ {
+     return _PyDictView_New(dict, &PyDictItems_Type);
+ }
+diff --git a/Objects/fileobject.c b/Objects/fileobject.c
+index 0f71944..456471b 100644
+--- a/Objects/fileobject.c
++++ b/Objects/fileobject.c
+@@ -411,7 +411,7 @@ stdprinter_repr(PyStdPrinter_Object *self)
+ }
+ 
+ static PyObject *
+-stdprinter_noop(PyStdPrinter_Object *self)
++stdprinter_noop(PyStdPrinter_Object *self, void *Py_UNUSED(ignored))
+ {
+     Py_RETURN_NONE;
+ }
+diff --git a/Objects/funcobject.c b/Objects/funcobject.c
+index 241685d..f1e273c 100644
+--- a/Objects/funcobject.c
++++ b/Objects/funcobject.c
+@@ -277,14 +277,14 @@ func_set_code(PyFunctionObject *op, PyObject *value)
+ }
+ 
+ static PyObject *
+-func_get_name(PyFunctionObject *op)
++func_get_name(PyFunctionObject *op, void *Py_UNUSED(ignored))
+ {
+     Py_INCREF(op->func_name);
+     return op->func_name;
+ }
+ 
+ static int
+-func_set_name(PyFunctionObject *op, PyObject *value)
++func_set_name(PyFunctionObject *op, PyObject *value, void *Py_UNUSED(ignored))
+ {
+     /* Not legal to del f.func_name or to set it to anything
+      * other than a string object. */
+@@ -299,14 +299,14 @@ func_set_name(PyFunctionObject *op, PyObject *value)
+ }
+ 
+ static PyObject *
+-func_get_qualname(PyFunctionObject *op)
++func_get_qualname(PyFunctionObject *op, void *Py_UNUSED(ignored))
+ {
+     Py_INCREF(op->func_qualname);
+     return op->func_qualname;
+ }
+ 
+ static int
+-func_set_qualname(PyFunctionObject *op, PyObject *value)
++func_set_qualname(PyFunctionObject *op, PyObject *value, void *Py_UNUSED(ignored))
+ {
+     /* Not legal to del f.__qualname__ or to set it to anything
+      * other than a string object. */
+-- 
+2.17.1
+
