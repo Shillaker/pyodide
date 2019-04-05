@@ -17,7 +17,7 @@ export WASM_LDSHARED=$(EMCC_BIN)/wasm-ld
 export WASM_CFLAGS="--sysroot=$(WASM_SYSROOT)"
 export WASM_CPPFLAGS="-DHAVE_UNSETENV=1 -DHAVE_PUTENV=1 -DHAVE_TIMEGM=1"
 
-export PYVERSION=3.7.2
+export PYVERSION=3.7.0
 export PYMINOR=$(basename $(PYVERSION))
 export HOSTPYTHONROOT=$(PYODIDE_ROOT)/cpython/build/$(PYVERSION)/host
 export HOSTPYTHON=$(HOSTPYTHONROOT)/bin/python3
