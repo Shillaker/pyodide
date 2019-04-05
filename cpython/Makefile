@@ -70,6 +70,7 @@ $(BUILD)/Makefile:
 		CFLAGS=$(WASM_CFLAGS) \
 		CXXFLAGS=$(WASM_CFLAGS) \
 		CPPFLAGS=$(WASM_CPPFLAGS) \
+		LDSHARED=$(WASM_LDSHARED) \
 		CONFIG_SITE=./config.site \
 		READELF=true \
 		./configure \

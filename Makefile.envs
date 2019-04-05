@@ -1,5 +1,5 @@
 export EMCC_WASM_BACKEND=1
-export EMSCRIPTEN_VERSION=4640
+export EMSCRIPTEN_VERSION=4710
 export EMSCRIPTEN_SDK=sdk-upstream-$(EMSCRIPTEN_VERSION)-64bit
 
 export EMCC_ROOT=$(PYODIDE_ROOT)/emsdk/emsdk/upstream/$(EMSCRIPTEN_VERSION)
@@ -13,6 +13,7 @@ export WASM_CXX=$(EMCC_BIN)/wasm32-clang++
 export WASM_AR=$(EMCC_BIN)/llvm-ar
 export WASM_RANLIB=$(EMCC_BIN)/llvm-ranlib
 export WASM_SYSROOT=$(EMCC_ROOT)/sysroot
+export WASM_LDSHARED=$(EMCC_BIN)/wasm-ld
 export WASM_CFLAGS="--sysroot=$(WASM_SYSROOT)"
 export WASM_CPPFLAGS="-DHAVE_UNSETENV=1 -DHAVE_PUTENV=1 -DHAVE_TIMEGM=1"
 
