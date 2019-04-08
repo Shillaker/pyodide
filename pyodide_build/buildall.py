@@ -80,10 +80,10 @@ def make_parser(parser):
         '--ldflags', type=str, nargs='?', default=common.DEFAULTLDFLAGS,
         help='Extra linking flags')
     parser.add_argument(
-        '--host', type=str, nargs='?', default=common.HOSTPYTHON,
+        '--host', type=str, nargs='?', default=str(common.HOSTPYTHON),
         help='The path to the host Python installation')
     parser.add_argument(
-        '--target', type=str, nargs='?', default=common.TARGETPYTHON,
+        '--target', type=str, nargs='?', default=str(common.TARGETPYTHON),
         help='The path to the target Python installation')
     return parser
 
