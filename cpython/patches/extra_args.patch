@@ -46,22 +46,6 @@ index f594bda..70543c7 100644
  {
      /* Sanity check: the lock must be locked */
      if (!self->locked) {
-@@ -242,14 +242,14 @@ static PyMemberDef func_memberlist[] = {
-  };
-
-  static PyObject *
- -func_get_code(PyFunctionObject *op)
- +func_get_code(PyFunctionObject *op, void *Py_UNUSED(ignored))
-  {
-      Py_INCREF(op->func_code);
-      return op->func_code;
-  }
-
-  static int
- -func_set_code(PyFunctionObject *op, PyObject *value)
- +func_set_code(PyFunctionObject *op, PyObject *value, void *Py_UNUSED(ignored))
-  {
-      Py_ssize_t nfree, nclosure;
 @@ -1117,7 +1117,7 @@ A subthread can use this function to interrupt the main thread."
  static lockobject *newlockobject(void);
  
@@ -150,6 +134,23 @@ diff --git a/Objects/funcobject.c b/Objects/funcobject.c
 index 241685d..f1e273c 100644
 --- a/Objects/funcobject.c
 +++ b/Objects/funcobject.c
+@@ -242,14 +242,14 @@ static PyMemberDef func_memberlist[] = {
+  };
+
+ static PyObject *
+-func_get_code(PyFunctionObject *op)
++func_get_code(PyFunctionObject *op, void *Py_UNUSED(ignored))
+ {
+     Py_INCREF(op->func_code);
+     return op->func_code;
+ }
+
+ static int
+-func_set_code(PyFunctionObject *op, PyObject *value)
++func_set_code(PyFunctionObject *op, PyObject *value, void *Py_UNUSED(ignored))
+ {
+     Py_ssize_t nfree, nclosure;
+
 @@ -277,14 +277,14 @@ func_set_code(PyFunctionObject *op, PyObject *value)
  }
  
