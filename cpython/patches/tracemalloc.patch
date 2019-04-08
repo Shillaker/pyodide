@@ -1,0 +1,14 @@
+diff --git a/Python/pylifecycle.c b/Python/pylifecycle.c
+index fdb759f..7b98b8d 100644
+--- a/Python/pylifecycle.c
++++ b/Python/pylifecycle.c
+@@ -70,7 +70,7 @@ extern _PyInitError _PyFaulthandler_Init(int enable);
+ extern void _PyFaulthandler_Fini(void);
+ extern void _PyHash_Fini(void);
+ extern int _PyTraceMalloc_Init(int enable);
+-extern int _PyTraceMalloc_Fini(void);
++extern void _PyTraceMalloc_Fini(void);
+ extern void _Py_ReadyTypes(void);
+ 
+ extern void _PyGILState_Init(PyInterpreterState *, PyThreadState *);
+
