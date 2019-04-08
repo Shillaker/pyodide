@@ -189,7 +189,9 @@ def build_package(path, args):
         srcpath = download_and_extract(buildpath, packagedir, pkg, args)
         patch(path, srcpath, pkg, args)
         compile(path, srcpath, pkg, args)
-        package_files(buildpath, srcpath, pkg, args)
+
+        # Don't need this for our stuff
+        #package_files(buildpath, srcpath, pkg, args)
     finally:
         os.chdir(orig_path)
 

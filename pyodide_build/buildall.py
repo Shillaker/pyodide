@@ -19,13 +19,16 @@ def build_package(pkgname, dependencies, packagesdir, outputdir, args):
     # Make sure all of the package's requirements are built first
     for req in reqs:
         build_package(req, dependencies, packagesdir, outputdir, args)
+
     buildpkg.build_package(packagesdir / pkgname / 'meta.yaml', args)
-    shutil.copyfile(
-        packagesdir / pkgname / 'build' / (pkgname + '.data'),
-        outputdir / (pkgname + '.data'))
-    shutil.copyfile(
-        packagesdir / pkgname / 'build' / (pkgname + '.js'),
-        outputdir / (pkgname + '.js'))
+
+    # We can ignore this step
+    # shutil.copyfile(
+    #     packagesdir / pkgname / 'build' / (pkgname + '.data'),
+    #     outputdir / (pkgname + '.data'))
+    # shutil.copyfile(
+    #     packagesdir / pkgname / 'build' / (pkgname + '.js'),
+    #     outputdir / (pkgname + '.js'))
 
 
 def build_packages(packagesdir, outputdir, args):

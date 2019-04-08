@@ -26,9 +26,3 @@ export PYTHONINCLUDE=$(PYODIDE_ROOT)/cpython/installs/python-$(PYVERSION)/includ
 
 export PYODIDE_PACKAGE_ABI=1
 
-export SIDE_LDFLAGS=\
-	-s "BINARYEN_METHOD='native-wasm'" \
-	-Werror \
-    -s "BINARYEN_TRAP_MODE='clamp'" \
-    -s LINKABLE=1 \
-    -s EXPORT_ALL=1
