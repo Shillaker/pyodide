@@ -311,10 +311,10 @@ def handle_command(line, args, dryrun=False):
 
     # We need to remove the platform-specific part of shared object names
     if shared:
-        renamed = output.replace('.cpython-37m-x86_64-linux-gnu', '')
-        
+        renamed = arg.replace('.cpython-37m-x86_64-linux-gnu', '')
+
         if not dryrun:
-            os.rename(output, renamed)
+            os.rename(arg, renamed)
     return new_args
 
 
