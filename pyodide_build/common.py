@@ -8,25 +8,32 @@ CPYTHON_INCLUDE = CPYTHON_INSTALL / 'include' / 'python3.7d'
 CPYTHON_STATIC_LIB = CPYTHON_INSTALL / 'lib' / 'libpython3.7d.a'
 CPYTHON_HOST_BUILD = CPYTHON_ROOT / 'build' / '3.7.0' / 'host'
 
-SYSROOT = PYODIDE_ROOT / 'emsdk' / 'emsdk' / 'upstream' / '4778' / 'sysroot'
+SYSROOT = PYODIDE_ROOT / 'emsdk' / 'emsdk' / 'upstream' / '4854' / 'sysroot'
 
 ROOTDIR = PYODIDE_ROOT / 'tools'
 HOSTPYTHON = CPYTHON_HOST_BUILD
 TARGETPYTHON = CPYTHON_INSTALL
 
+# A few things to note about the CFLAGS and LDFLAGS:
+#
+# - they all have a reason to be there, one mistake and the wasm comes out very different
+# - we must NOT include standard libraries
+# - we must NOT include the compiled python library
+# - everything the c extensions need from these libraries should be included in the main module
+#
 DEFAULTCFLAGS = ' '.join([
     '--sysroot={}'.format(SYSROOT),
     '-I {}'.format(CPYTHON_INCLUDE),
     '-D__WASM__=1',
+    '-nostdlib',
+    '-nostdlib++',
 ])
 
 DEFAULTLDFLAGS = ' '.join([
+    '--sysroot={}'.format(SYSROOT),
     "-Xlinker --shared",
-    "-Xlinker --import-memory",
-    "-Xlinker --import-table",
     "-Xlinker --stack-first",
     "-Xlinker --no-entry",
-    str(CPYTHON_STATIC_LIB),
 ])
 
 

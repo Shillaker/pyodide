@@ -41,6 +41,11 @@ def build_packages(packagesdir, outputdir, args):
         if pkgdir.is_dir() and pkgpath.is_file():
             pkg = common.parse_package(pkgpath)
             name = pkg['package']['name']
+
+            if name != 'numpy':
+                print("SKIPPING {}".format(name))
+                continue
+
             reqs = pkg.get('requirements', {}).get('run', [])
             dependencies[name] = reqs
             imports = pkg.get('test', {}).get('imports', [name])
@@ -55,11 +60,11 @@ def build_packages(packagesdir, outputdir, args):
     dependencies['test'] = []
 
     # This is done last so the Makefile can use it as a completion token.
-    with open(outputdir / 'packages.json', 'w') as fd:
-        json.dump({
-            'dependencies': dependencies,
-            'import_name_to_package_name': import_name_to_package_name,
-        }, fd)
+    # with open(outputdir / 'packages.json', 'w') as fd:
+    #     json.dump({
+    #         'dependencies': dependencies,
+    #         'import_name_to_package_name': import_name_to_package_name,
+    #     }, fd)
 
 
 def make_parser(parser):

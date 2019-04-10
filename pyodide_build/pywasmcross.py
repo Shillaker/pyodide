@@ -239,6 +239,10 @@ def handle_command(line, args, dryrun=False):
 
     # Go through and adjust arguments
     for arg in line[1:]:
+        # Ignore pthread
+        if arg == '-pthread':
+            continue
+
         if arg.startswith('-I'):
             # Don't include any system directories
             if arg[2:].startswith('/usr'):
@@ -249,15 +253,18 @@ def handle_command(line, args, dryrun=False):
         # Don't include any system directories
         if arg.startswith('-L/usr'):
             continue
+
         # The native build is possibly multithreaded, but the emscripten one
         # definitely isn't
         arg = re.sub(r'/python([0-9]\.[0-9]+)m', r'/python\1', arg)
-        if arg.endswith('.o'):
-            arg = arg[:-2] + '.bc'
-            output = arg
-        elif shared and arg.endswith('.so'):
-            arg = arg[:-3] + '.wasm'
-            output = arg
+
+        # We probably don't want to mess around with extensions
+        # if arg.endswith('.o'):
+        #     arg = arg[:-2] + '.bc'
+        #     output = arg
+        # elif shared and arg.endswith('.so'):
+        #     arg = arg[:-3] + '.wasm'
+        #     output = arg
 
         # Fix for scipy to link to the correct BLAS/LAPACK files
         if arg.startswith('-L') and 'CLAPACK-WA' in arg:
@@ -302,15 +309,10 @@ def handle_command(line, args, dryrun=False):
         if result.returncode != 0:
             sys.exit(result.returncode)
 
-    # Emscripten .so files shouldn't have the native platform slug
+    # We need to remove the platform-specific part of shared object names
     if shared:
-        renamed = output[:-5] + '.so'
-        for ext in importlib.machinery.EXTENSION_SUFFIXES:
-            if ext == '.so':
-                continue
-            if renamed.endswith(ext):
-                renamed = renamed[:-len(ext)] + '.so'
-                break
+        renamed = output.replace('.cpython-37m-x86_64-linux-gnu', '')
+        
         if not dryrun:
             os.rename(output, renamed)
     return new_args
