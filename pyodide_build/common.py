@@ -8,7 +8,7 @@ CPYTHON_INCLUDE = CPYTHON_INSTALL / 'include' / 'python3.7d'
 CPYTHON_STATIC_LIB = CPYTHON_INSTALL / 'lib' / 'libpython3.7d.a'
 CPYTHON_HOST_BUILD = CPYTHON_ROOT / 'build' / '3.7.0' / 'host'
 
-SYSROOT = PYODIDE_ROOT / 'emsdk' / 'emsdk' / 'upstream' / '4854' / 'sysroot'
+SYSROOT = PYODIDE_ROOT / 'emsdk' / 'emsdk' / 'upstream' / 'latest' / 'sysroot'
 
 ROOTDIR = PYODIDE_ROOT / 'tools'
 HOSTPYTHON = CPYTHON_HOST_BUILD
@@ -20,6 +20,7 @@ TARGETPYTHON = CPYTHON_INSTALL
 # - we must NOT include standard libraries
 # - we must NOT include the compiled python library
 # - everything the c extensions need from these libraries should be included in the main module
+# - shared objects must unfortunately export all of their symbols as we don't know ahead of time what we'll need
 #
 DEFAULTCFLAGS = ' '.join([
     '--sysroot={}'.format(SYSROOT),
@@ -34,6 +35,10 @@ DEFAULTLDFLAGS = ' '.join([
     "-Xlinker --shared",
     "-Xlinker --stack-first",
     "-Xlinker --no-entry",
+    "-Xlinker --export-all",
+    "-Xlinker --no-gc-sections",
+    '-nostdlib',
+    '-nostdlib++',
 ])
 
 

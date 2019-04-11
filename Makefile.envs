@@ -1,8 +1,6 @@
 export EMCC_WASM_BACKEND=1
-export EMSCRIPTEN_VERSION=4854
-export EMSCRIPTEN_SDK=sdk-upstream-$(EMSCRIPTEN_VERSION)-64bit
 
-export EMCC_ROOT=$(PYODIDE_ROOT)/emsdk/emsdk/upstream/$(EMSCRIPTEN_VERSION)
+export EMCC_ROOT=$(PYODIDE_ROOT)/emsdk/emsdk/upstream/latest
 export EMCC_BIN=$(EMCC_ROOT)/bin
 
 export WASM_TRIPLE=wasm32-unknown-wasm
