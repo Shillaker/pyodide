@@ -36,6 +36,7 @@ DEFAULTLDFLAGS = ' '.join([
     "-Xlinker --stack-first",
     "-Xlinker --no-entry",
     "-Xlinker --export-all",
+    "-Xlinker --export-dynamic",
     "-Xlinker --no-gc-sections",
     '-nostdlib',
     '-nostdlib++',
