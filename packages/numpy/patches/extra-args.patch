@@ -1,0 +1,25 @@
+diff --git a/numpy/core/src/multiarray/scalartypes.src b/numpy/core/src/multiarray/scalartypes.c.src
+index 3104d23..90d418b 100644
+--- a/numpy/core/src/multiarray/scalartypes.c.src
++++ b/numpy/core/src/multiarray/scalartypes.c.src
+@@ -1259,7 +1259,7 @@ gentype_data_get(PyObject *self)
+ 
+ 
+ static PyObject *
+-gentype_itemsize_get(PyObject *self)
++gentype_itemsize_get(PyObject *self, PyObject *ignored)
+ {
+     PyArray_Descr *typecode;
+     PyObject *ret;
+@@ -1287,7 +1287,7 @@ static PyObject *
+ gentype_sizeof(PyObject *self)
+ {
+     Py_ssize_t nbytes;
+-    PyObject * isz = gentype_itemsize_get(self);
++    PyObject * isz = gentype_itemsize_get(self, (PyObject*)0);
+     if (isz == NULL) {
+         return NULL;
+     }
+-- 
+2.17.1
+
