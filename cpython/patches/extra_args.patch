@@ -239,6 +239,127 @@ index 241685d..f1e273c 100644
  {
      if (value == Py_None)
          value = NULL;
+diff --git a/Objects/descrobject.c b/Objects/descrobject.c
+index 470b6ed..e31e032 100644
+--- a/Objects/descrobject.c
++++ b/Objects/descrobject.c
+@@ -868,14 +868,14 @@ mappingproxy_get(mappingproxyobject *pp, PyObject *args)
+ }
+
+ static PyObject *
+-mappingproxy_keys(mappingproxyobject *pp)
++mappingproxy_keys(mappingproxyobject *pp, void *Py_UNUSED(ignored))
+ {
+     _Py_IDENTIFIER(keys);
+     return _PyObject_CallMethodId(pp->mapping, &PyId_keys, NULL);
+ }
+
+ static PyObject *
+-mappingproxy_values(mappingproxyobject *pp)
++mappingproxy_values(mappingproxyobject *pp, void *Py_UNUSED(ignored))
+ {
+     _Py_IDENTIFIER(values);
+     return _PyObject_CallMethodId(pp->mapping, &PyId_values, NULL);
+diff --git a/Objects/odictobject.c b/Objects/odictobject.c
+index ac97f52..58942ca 100644
+--- a/Objects/odictobject.c
++++ b/Objects/odictobject.c
+@@ -884,7 +884,7 @@ OrderedDict_fromkeys_impl(PyTypeObject *type, PyObject *seq, PyObject *value)
+ PyDoc_STRVAR(odict_sizeof__doc__, "");
+
+ static PyObject *
+-odict_sizeof(PyODictObject *od)
++odict_sizeof(PyODictObject *od, PyObject *Py_UNUSED(ignored))
+ {
+     Py_ssize_t res = _PyDict_SizeOf((PyDictObject *)od);
+     res += sizeof(_ODictNode *) * _odict_FAST_SIZE(od);  /* od_fast_nodes */
+@@ -899,7 +899,7 @@ odict_sizeof(PyODictObject *od)
+ PyDoc_STRVAR(odict_reduce__doc__, "Return state information for pickling");
+
+ static PyObject *
+-odict_reduce(register PyODictObject *od)
++odict_reduce(register PyODictObject *od, PyObject *Py_UNUSED(ignored))
+ {
+     _Py_IDENTIFIER(__dict__);
+     _Py_IDENTIFIER(items);
+@@ -1143,21 +1143,21 @@ OrderedDict_popitem_impl(PyODictObject *self, int last)
+ /* MutableMapping.keys() does not have a docstring. */
+ PyDoc_STRVAR(odict_keys__doc__, "");
+
+-static PyObject * odictkeys_new(PyObject *od);  /* forward */
++static PyObject * odictkeys_new(PyObject *od, PyObject *Py_UNUSED(ignored));  /* forward */
+
+ /* values() */
+
+ /* MutableMapping.values() does not have a docstring. */
+ PyDoc_STRVAR(odict_values__doc__, "");
+
+-static PyObject * odictvalues_new(PyObject *od);  /* forward */
++static PyObject * odictvalues_new(PyObject *od, PyObject *Py_UNUSED(ignored));  /* forward */
+
+ /* items() */
+
+ /* MutableMapping.items() does not have a docstring. */
+ PyDoc_STRVAR(odict_items__doc__, "");
+
+-static PyObject * odictitems_new(PyObject *od);  /* forward */
++static PyObject * odictitems_new(PyObject *od, PyObject *Py_UNUSED(ignored));  /* forward */
+
+ /* update() */
+@@ -1193,7 +1193,7 @@ static int _PyODict_SetItem_KnownHash(PyObject *, PyObject *, PyObject *,
+ PyDoc_STRVAR(odict_copy__doc__, "od.copy() -> a shallow copy of od");
+
+ static PyObject *
+-odict_copy(register PyODictObject *od)
++odict_copy(register PyODictObject *od, PyObject *Py_UNUSED(ignored))
+ {
+     _ODictNode *node;
+     PyObject *od_copy;
+@@ -1252,7 +1252,7 @@ PyDoc_STRVAR(odict_reversed__doc__, "od.__reversed__() <==> reversed(od)");
+ static PyObject * odictiter_new(PyODictObject *, int);
+
+ static PyObject *
+-odict_reversed(PyODictObject *od)
++odict_reversed(PyODictObject *od, PyObject *Py_UNUSED(ignored))
+ {
+     return odictiter_new(od, _odict_ITER_KEYS|_odict_ITER_REVERSED);
+ }
+@@ -2005,7 +2005,7 @@ PyTypeObject PyODictKeys_Type = {
+ };
+
+ static PyObject *
+-odictkeys_new(PyObject *od)
++odictkeys_new(PyObject *od, PyObject *Py_UNUSED(ignored))
+ {
+     return _PyDictView_New(od, &PyODictKeys_Type);
+ }
+@@ -2072,7 +2072,7 @@ PyTypeObject PyODictItems_Type = {
+ };
+
+ static PyObject *
+-odictitems_new(PyObject *od)
++odictitems_new(PyObject *od, PyObject *Py_UNUSED(ignored))
+ {
+     return _PyDictView_New(od, &PyODictItems_Type);
+ }
+@@ -2090,7 +2090,7 @@ odictvalues_iter(_PyDictViewObject *dv)
+ }
+
+ static PyObject *
+-odictvalues_reversed(_PyDictViewObject *dv)
++odictvalues_reversed(_PyDictViewObject *dv, PyObject *Py_UNUSED(ignored))
+ {
+     if (dv->dv_dict == NULL) {
+         Py_RETURN_NONE;
+@@ -2139,7 +2139,7 @@ PyTypeObject PyODictValues_Type = {
+ };
+
+ static PyObject *
+-odictvalues_new(PyObject *od)
++odictvalues_new(PyObject *od, PyObject *Py_UNUSED(ignored))
+ {
+     return _PyDictView_New(od, &PyODictValues_Type);
+ }
 -- 
 2.17.1
 
