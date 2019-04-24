@@ -14,16 +14,19 @@ TARBALL=$(ROOT)/downloads/Python-$(PYVERSION).tgz
 URL=https://www.python.org/ftp/python/$(PYVERSION)/Python-$(PYVERSION).tgz
 LIB=libpython$(PYMINOR)d.a
 
-ZLIBVERSION=1.2.11
-ZLIBTARBALL=$(ROOT)/downloads/zlib-$(ZLIBVERSION).tar.gz
-ZLIBBUILD=$(ROOT)/build/zlib-$(ZLIBVERSION)
-ZLIBURL=https://zlib.net/zlib-1.2.11.tar.gz
+ZLIBVERSION=zlib-1.2.11
+ZLIBTARBALL=$(ROOT)/downloads/$(ZLIBVERSION).tar.gz
+ZLIBBUILD=$(ROOT)/build/$(ZLIBVERSION)
+ZLIBURL=https://zlib.net/$(ZLIBVERSION).tar.gz
+
+ZLIBWASMBUILD=$(ROOT)/build/zlib-wasm/$(ZLIBVERSION)
+ZLIBWASM=$(ZLIBWASMBUILD)/zlib.a
 
 all: host configure build
 
 # Sets up the host build (run once)
 .PHONY: host
-host: $(HOSTPYTHON) $(HOSTPGEN) $(BUILD)/.patched $(ZLIBBUILD)/.patched
+host: $(HOSTPYTHON) $(HOSTPGEN) $(BUILD)/.patched $(ZLIBLIB)
 
 # Configures the build
 .PHONY: configure
@@ -36,6 +39,10 @@ build: $(INSTALL)/lib/$(LIB)
 # Builds just the lib
 .PHONY: lib
 lib: $(BUILD)/$(LIB)
+
+# Builds just zlib wasm
+.PHONY: zlib
+zlib: $(ZLIBWASM)
 
 clean:
 	-rm -fr $(HOSTINSTALL)
@@ -104,19 +111,6 @@ $(TARBALL):
 	wget -q -O $@ $(URL)
 	md5sum --quiet --check checksums || (rm $@; false)
 
-
-$(ZLIBTARBALL):
-	[ -d $(ROOT)/downloads ] || mkdir $(ROOT)/downloads
-	wget -q -O $@ $(ZLIBURL)
-
-
-$(ZLIBBUILD)/.patched: $(ZLIBTARBALL)
-	[ -d $(ROOT)/build ] || (mkdir $(ROOT)/build)
-	tar -C $(ROOT)/build/ -xf $(ROOT)/downloads/zlib-1.2.11.tar.gz
-	cat patches/zlib/*.patch | (cd $(ZLIBBUILD) ; patch -p1)
-	touch $@
-
-
 $(HOSTPYTHON) $(HOSTPGEN): $(TARBALL)
 	mkdir -p $(HOSTINSTALL)
 	[ -d $(HOSTBUILD) ] || tar -C $(HOSTINSTALL) -xf $(TARBALL)
@@ -135,4 +129,42 @@ $(BUILD)/.patched: $(TARBALL)
 	cat patches/*.patch | (cd $(BUILD) ; patch -p1)
 	touch $@
 
+# ----------------------------------
+# ZLIB HOST
+# ----------------------------------
+
+$(ZLIBTARBALL):
+	[ -d $(ROOT)/downloads ] || mkdir $(ROOT)/downloads
+	wget -q -O $@ $(ZLIBURL)
+
+
+$(ZLIBBUILD)/.patched: $(ZLIBTARBALL)
+	[ -d $(ROOT)/build ] || (mkdir $(ROOT)/build)
+	tar -C $(ROOT)/build/ -xf $(ROOT)/downloads/zlib-1.2.11.tar.gz
+	cat patches/zlib/*.patch | (cd $(ZLIBBUILD) ; patch -p1)
+	touch $@
+
+# ----------------------------------
+# ZLIB WASM
+# ----------------------------------
+
+$(ZLIBWASM): $(ZLIBTARBALL)
+	[ -d $(ROOT)/build/zlib-wasm ] || (mkdir -p $(ROOT)/build/zlib-wasm)
+	tar -C $(ROOT)/build/zlib-wasm -xf $(ROOT)/downloads/zlib-1.2.11.tar.gz
+	( \
+		cd $(ZLIBWASMBUILD); \
+		CC=$(WASM_CC) \
+		CXX=$(WASM_CXX) \
+		AR=$(WASM_AR) \
+		RANLIB=$(WASM_RANLIB) \
+		CFLAGS="$(WASM_CFLAGS) -ldlmalloc" \
+		CXXFLAGS=$(WASM_CFLAGS) \
+		CPPFLAGS=$(WASM_CPPFLAGS) \
+		LDSHARED=$(WASM_LDSHARED) \
+		./configure \
+		--static \
+		--prefix=$(INSTALL); \
+	)
+	cd $(ZLIBWASMBUILD) && make
+	cd $(ZLIBWASMBUILD) && make install
 
