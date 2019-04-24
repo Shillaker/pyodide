@@ -20,13 +20,13 @@ ZLIBBUILD=$(ROOT)/build/$(ZLIBVERSION)
 ZLIBURL=https://zlib.net/$(ZLIBVERSION).tar.gz
 
 ZLIBWASMBUILD=$(ROOT)/build/zlib-wasm/$(ZLIBVERSION)
-ZLIBWASM=$(ZLIBWASMBUILD)/zlib.a
+ZLIBWASM=$(ZLIBWASMBUILD)/libz.a
 
 all: host configure build
 
 # Sets up the host build (run once)
 .PHONY: host
-host: $(HOSTPYTHON) $(HOSTPGEN) $(BUILD)/.patched $(ZLIBLIB)
+host: $(HOSTPYTHON) $(HOSTPGEN) $(BUILD)/.patched $(ZLIBWASM)
 
 # Configures the build
 .PHONY: configure
