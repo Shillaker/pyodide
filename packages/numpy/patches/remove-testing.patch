@@ -1,0 +1,35 @@
+diff --git a/numpy/core/__init__.py b/numpy/core/__init__.py
+index 4d9cbf5..0d0afff 100644
+--- a/numpy/core/__init__.py
++++ b/numpy/core/__init__.py
+@@ -100,6 +100,3 @@ del copyreg
+ del sys
+ del _ufunc_reduce
+ 
+-from numpy.testing._private.pytesttester import PytestTester
+-test = PytestTester(__name__)
+-del PytestTester
+diff --git a/numpy/linalg/__init__.py b/numpy/linalg/__init__.py
+index 37bd275..cc0a7cb 100644
+--- a/numpy/linalg/__init__.py
++++ b/numpy/linalg/__init__.py
+@@ -50,6 +50,3 @@ from .info import __doc__
+ 
+ from .linalg import *
+ 
+-from numpy.testing._private.pytesttester import PytestTester
+-test = PytestTester(__name__)
+-del PytestTester
+diff --git a/numpy/matrixlib/__init__.py b/numpy/matrixlib/__init__.py
+index 3ad3a95..40a2913 100644
+--- a/numpy/matrixlib/__init__.py
++++ b/numpy/matrixlib/__init__.py
+@@ -7,6 +7,3 @@ from .defmatrix import *
+
+ __all__ = defmatrix.__all__
+
+-from numpy.testing._private.pytesttester import PytestTester
+-test = PytestTester(__name__)
+-del PytestTester
+--
+2.17.1

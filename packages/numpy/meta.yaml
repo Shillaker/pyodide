@@ -8,6 +8,7 @@ source:
 
   patches:
     - patches/extra-args.patch
+    - patches/remove-testing.patch
     - patches/add-emscripten-cpu.patch
     - patches/disable-maybe-uninitialized.patch
     - patches/dont-include-execinfo.patch

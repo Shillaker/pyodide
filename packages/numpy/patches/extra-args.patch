@@ -7,7 +7,7 @@ index 3104d23..90d418b 100644
  
  static PyObject *
 -gentype_itemsize_get(PyObject *self)
-+gentype_itemsize_get(PyObject *self, PyObject *ignored)
++gentype_itemsize_get(PyObject *self, PyObject *NPY_UNUSED(ignored))
  {
      PyArray_Descr *typecode;
      PyObject *ret;
@@ -20,6 +20,18 @@ index 3104d23..90d418b 100644
      if (isz == NULL) {
          return NULL;
      }
+diff --git a/numpy/core/src/multiarray/getset.c b/numpy/core/src/multiarray/getset.c
+index cae4273..6b09450 100644
+--- a/numpy/core/src/multiarray/getset.c
++++ b/numpy/core/src/multiarray/getset.c
+@@ -201,7 +201,7 @@ array_typestr_get(PyArrayObject *self)
+ }
+ 
+ static PyObject *
+-array_descr_get(PyArrayObject *self)
++array_descr_get(PyArrayObject *self, PyObject *NPY_UNUSED(ignored))
+ {
+     Py_INCREF(PyArray_DESCR(self));
+     return (PyObject *)PyArray_DESCR(self);
 -- 
 2.17.1
-
