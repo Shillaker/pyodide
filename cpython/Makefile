@@ -148,7 +148,7 @@ $(ZLIBBUILD)/.patched: $(ZLIBTARBALL)
 # ZLIB WASM
 # ----------------------------------
 
-$(ZLIBWASM): $(ZLIBTARBALL)
+$(ZLIBWASM): $(ZLIBBUILD)/.patched
 	[ -d $(ROOT)/build/zlib-wasm ] || (mkdir -p $(ROOT)/build/zlib-wasm)
 	tar -C $(ROOT)/build/zlib-wasm -xf $(ROOT)/downloads/zlib-1.2.11.tar.gz
 	( \
