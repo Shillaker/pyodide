@@ -165,6 +165,9 @@ $(ZLIBWASM): $(ZLIBTARBALL)
 		--static \
 		--prefix=$(INSTALL); \
 	)
-	cd $(ZLIBWASMBUILD) && make
-	cd $(ZLIBWASMBUILD) && make install
+	( \
+		cd $(ZLIBWASMBUILD); \
+		make; \
+		make install; \
+	)
 
