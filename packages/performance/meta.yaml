@@ -1,0 +1,11 @@
+package:
+  name: performance
+  version: '0.7.0'
+
+source:
+  sha256: 7931f4f5f353bda3a58236208e7b1104813f610a23248eee4c4d9d091e923693
+  url: 'https://files.pythonhosted.org/packages/55/be/e8592ea520fbf3138e2e6d234fbe1a4691c9fcff75b9fe539e8a9dd680f2/performance-0.7.0.tar.gz'
+
+requirements:
+  run:
+    - perf

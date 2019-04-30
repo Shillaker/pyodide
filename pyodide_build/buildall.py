@@ -32,6 +32,9 @@ def build_package(pkgname, dependencies, packagesdir, outputdir, args):
 
 
 def build_packages(packagesdir, outputdir, args):
+    # TODO - run full list
+    faasm_included = ['numpy', 'performance', 'perf']
+
     # We have to build the packages in the correct order (dependencies first),
     # so first load in all of the package metadata and build a dependency map.
     dependencies = {}
@@ -42,7 +45,7 @@ def build_packages(packagesdir, outputdir, args):
             pkg = common.parse_package(pkgpath)
             name = pkg['package']['name']
 
-            if name != 'numpy':
+            if name not in faasm_included:
                 print("SKIPPING {}".format(name))
                 continue
 
