@@ -1,0 +1,12 @@
+diff --git a/numpy/core/src/multiarray/mapping.c b/numpy/core/src/multiarray/mapping.c
+index f338226..6da7a11 100644
+--- a/numpy/core/src/multiarray/mapping.c
++++ b/numpy/core/src/multiarray/mapping.c
+@@ -878,6 +878,7 @@ index_has_memory_overlap(PyArrayObject *self,
+  *
+  * @return 0 on success -1 on failure
+  */
++__attribute__ ((noinline))
+ static int
+ get_item_pointer(PyArrayObject *self, char **ptr,
+                     npy_index_info *indices, int index_num) {

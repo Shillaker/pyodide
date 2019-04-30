@@ -7,6 +7,7 @@ source:
   sha256: 7b9e37f194f8bcdca8e9e6af92e2cbad79e360542effc2dd6b98d63955d8d8a3
 
   patches:
+    - patches/get_item_pointer.patch
     - patches/remove-testing.patch
     - patches/add-emscripten-cpu.patch
     - patches/disable-maybe-uninitialized.patch

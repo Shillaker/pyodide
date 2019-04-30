@@ -33,11 +33,13 @@ DEFAULTCFLAGS = ' '.join([
 DEFAULTLDFLAGS = ' '.join([
     '--sysroot={}'.format(SYSROOT),
     "-Xlinker --shared",
-    "-Xlinker --stack-first",
+    "-Xlinker --threads",
     "-Xlinker --no-entry",
     "-Xlinker --export-all",
     "-Xlinker --export-dynamic",
     "-Xlinker --no-gc-sections",
+    "-Xlinker --stack-first",
+    "-Wl,-z,stack-size=2097152 -Wl,",
     '-nostdlib',
     '-nostdlib++',
 ])
