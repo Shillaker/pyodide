@@ -1,0 +1,7 @@
+package:
+  name: Genshi
+  version: '0.7.2'
+
+source:
+  sha256: 7e90bd5d8d5b3d6bef9af6abacf271faca00f0f9512642d75e0e02cb79f7ba9f
+  url: 'https://files.pythonhosted.org/packages/62/37/e5746b356f94d9f71999df10317036688c42dd03742e3882defc11a674d5/Genshi-0.7.2.tar.gz'

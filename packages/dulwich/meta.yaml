@@ -1,0 +1,7 @@
+package:
+  name: dulwich
+  version: '0.19.11'
+
+source:
+  sha256: afbe070f6899357e33f63f3f3696e601731fef66c64a489dea1bc9f539f4a725
+  url: 'https://files.pythonhosted.org/packages/2e/02/42ce6e45a206ccb044d8a3296646497e96b5263624e5862d21da947b9d59/dulwich-0.19.11.tar.gz'
