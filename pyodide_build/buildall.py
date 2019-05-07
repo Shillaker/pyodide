@@ -35,7 +35,7 @@ def build_packages(packagesdir, outputdir, args):
     # TODO - run full list
     faasm_included = [
         'dulwich',
-        'genshi',
+        'Genshi',
         'numpy',
         'performance',
         'perf',
