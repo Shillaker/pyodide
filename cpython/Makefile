@@ -81,7 +81,6 @@ $(BUILD)/Makefile:
 		CONFIG_SITE=./config.site \
 		READELF=true \
 		./configure \
-		 --with-pydebug \
 		 --without-pymalloc \
 		 --disable-shared \
 		 --disable-ipv6 \
@@ -103,7 +102,7 @@ $(BUILD)/$(LIB): $(BUILD)/Makefile Setup.local
 	touch $(BUILD)/$(LIB)
 
 # ----------------------------------
-# DOWNLOAD AND HOST BUILD (RUN ONCE)
+# DOWNLOAD SOURCE AND DO HOST BUILD (RUN ONCE)
 # ----------------------------------
 
 $(TARBALL):
