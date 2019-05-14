@@ -14,7 +14,6 @@ TARBALL=$(ROOT)/downloads/Python-$(PYVERSION).tgz
 URL=https://www.python.org/ftp/python/$(PYVERSION)/Python-$(PYVERSION).tgz
 LIB=libpython$(PYMINOR).a
 
-
 ZLIBVERSION=zlib-1.2.11
 ZLIBTARBALL=$(ROOT)/downloads/$(ZLIBVERSION).tar.gz
 ZLIBBUILD=$(ROOT)/build/$(ZLIBVERSION)
@@ -22,6 +21,7 @@ ZLIBURL=https://zlib.net/$(ZLIBVERSION).tar.gz
 
 ZLIBWASMBUILD=$(ROOT)/build/zlib-wasm/$(ZLIBVERSION)
 ZLIBWASM=$(ZLIBWASMBUILD)/libz.a
+ZLIBWASMINSTALL=$(INSTALL)/lib/libz.a
 
 SQLITETARBALL=$(ROOT)/downloads/sqlite-autoconf-3270200.tar.gz
 SQLITEBUILD=$(ROOT)/build/sqlite-autoconf-3270200
@@ -32,7 +32,7 @@ all: $(INSTALL)/lib/$(LIB)
 
 
 .PHONY: zlib
-zlib: $(ZLIBWASM)
+zlib: $(ZLIBWASMINSTALL)
 
 
 $(INSTALL)/lib/$(LIB): $(BUILD)/$(LIB)
@@ -105,7 +105,7 @@ $(SQLITEBUILD)/libsqlite3.la: $(SQLITETARBALL)
 	)
 
 
-$(BUILD)/Makefile: $(BUILD)/.patched $(ZLIBBUILD)/.patched $(ZLIBWASM)
+$(BUILD)/Makefile: $(BUILD)/.patched $(ZLIBBUILD)/.patched $(ZLIBWASMINSTALL)
 	cp config.site $(BUILD)/
 	( \
 		cd $(BUILD); \
@@ -141,7 +141,7 @@ $(BUILD)/$(LIB): $(BUILD)/Makefile $(HOSTPYTHON) $(HOSTPGEN) Setup.local
 	touch $(BUILD)/$(LIB)
 
 
-$(ZLIBWASM): $(ZLIBBUILD)/.patched
+$(ZLIBWASMINSTALL): $(ZLIBBUILD)/.patched
 	[ -d $(ROOT)/build/zlib-wasm ] || (mkdir -p $(ROOT)/build/zlib-wasm)
 	tar -C $(ROOT)/build/zlib-wasm -xf $(ROOT)/downloads/$(ZLIBVERSION).tar.gz
 	( \
