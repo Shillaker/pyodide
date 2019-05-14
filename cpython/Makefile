@@ -31,6 +31,10 @@ SQLITEURL=https://www.sqlite.org/2019/sqlite-autoconf-3270200.tar.gz
 all: $(INSTALL)/lib/$(LIB)
 
 
+.PHONY: zlib
+zlib: $(ZLIBWASM)
+
+
 $(INSTALL)/lib/$(LIB): $(BUILD)/$(LIB)
 	( \
 		cd $(BUILD); \
