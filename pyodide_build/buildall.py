@@ -35,7 +35,7 @@ def build_packages(packagesdir, outputdir, args):
     # TODO - run full list
     faasm_included = [
         'dulwich',
-        'Genshi',
+        'genshi',
         'numpy',
         'performance',
         'perf',
@@ -52,7 +52,7 @@ def build_packages(packagesdir, outputdir, args):
             pkg = common.parse_package(pkgpath)
             name = pkg['package']['name']
 
-            if name not in faasm_included:
+            if name.lower() not in faasm_included:
                 print("SKIPPING {}".format(name))
                 continue
 
