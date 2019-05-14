@@ -12,7 +12,8 @@ BUILD=$(ROOT)/build/$(PYVERSION)/Python-$(PYVERSION)
 INSTALL=$(ROOT)/installs/python-$(PYVERSION)
 TARBALL=$(ROOT)/downloads/Python-$(PYVERSION).tgz
 URL=https://www.python.org/ftp/python/$(PYVERSION)/Python-$(PYVERSION).tgz
-LIB=libpython$(PYMINOR)d.a
+LIB=libpython$(PYMINOR).a
+
 
 ZLIBVERSION=zlib-1.2.11
 ZLIBTARBALL=$(ROOT)/downloads/$(ZLIBVERSION).tar.gz
@@ -22,38 +23,14 @@ ZLIBURL=https://zlib.net/$(ZLIBVERSION).tar.gz
 ZLIBWASMBUILD=$(ROOT)/build/zlib-wasm/$(ZLIBVERSION)
 ZLIBWASM=$(ZLIBWASMBUILD)/libz.a
 
-all: host configure build
+SQLITETARBALL=$(ROOT)/downloads/sqlite-autoconf-3270200.tar.gz
+SQLITEBUILD=$(ROOT)/build/sqlite-autoconf-3270200
+SQLITEURL=https://www.sqlite.org/2019/sqlite-autoconf-3270200.tar.gz
 
-# Sets up the host build (run once)
-.PHONY: host
-host: $(HOSTPYTHON) $(HOSTPGEN) $(BUILD)/.patched $(ZLIBWASM)
 
-# Configures the build
-.PHONY: configure
-configure: $(BUILD)/Makefile
+all: $(INSTALL)/lib/$(LIB)
 
-# Runs the build 
-.PHONY: build
-build: $(INSTALL)/lib/$(LIB)
 
-# Builds just the lib
-.PHONY: lib
-lib: $(BUILD)/$(LIB)
-
-# Builds just zlib wasm
-.PHONY: zlib
-zlib: $(ZLIBWASM)
-
-clean:
-	-rm -fr $(HOSTINSTALL)
-	-rm -fr $(BUILD)
-	-rm -fr $(INSTALL)
-
-# ---------------------------------
-# WASM BUILD
-# ---------------------------------
-
-# Build libs
 $(INSTALL)/lib/$(LIB): $(BUILD)/$(LIB)
 	( \
 		cd $(BUILD); \
@@ -61,12 +38,70 @@ $(INSTALL)/lib/$(LIB): $(BUILD)/$(LIB)
 		touch $(BUILD)/$(LIB) ; \
 		make -j 3 HOSTPYTHON=$(HOSTPYTHON) PYTHON_FOR_BUILD=$(HOSTPYTHON) CROSS_COMPILE=yes inclinstall libinstall $(LIB) && \
 		cp $(LIB) $(INSTALL)/lib/ && \
-		cp $(HOSTINSTALL)/lib/python$(PYMINOR)/`$(HOSTPYTHON) -c "import sysconfig; print(sysconfig._get_sysconfigdata_name())"`.py $(INSTALL)/lib/python$(PYMINOR)/_sysconfigdata__wasm_.py; \
-		sed -i -e 's#'"$(PYODIDE_ROOT)"'##g' $(INSTALL)/lib/python$(PYMINOR)/_sysconfigdata__wasm_.py; \
+		cp $(HOSTINSTALL)/lib/python$(PYMINOR)/`$(HOSTPYTHON) -c "import sysconfig; print(sysconfig._get_sysconfigdata_name())"`.py $(INSTALL)/lib/python$(PYMINOR)/_sysconfigdata__emscripten_.py; \
+		sed -i -e 's#'"$(PYODIDE_ROOT)"'##g' $(INSTALL)/lib/python$(PYMINOR)/_sysconfigdata__emscripten_.py; \
 	)
 
-# Configure
-$(BUILD)/Makefile: 
+
+clean:
+	-rm -fr $(HOSTINSTALL)
+	-rm -fr $(BUILD)
+	-rm -fr $(INSTALL)
+
+
+$(TARBALL):
+	[ -d $(ROOT)/downloads ] || mkdir $(ROOT)/downloads
+	wget -q -O $@ $(URL)
+	md5sum --quiet --check checksums || (rm $@; false)
+
+
+$(ZLIBTARBALL):
+	[ -d $(ROOT)/downloads ] || mkdir $(ROOT)/downloads
+	wget -q -O $@ $(ZLIBURL)
+
+
+$(SQLITETARBALL):
+	[ -d $(ROOT)/downloads ] || mkdir $(ROOT)/downloads
+	wget -q -O $@ $(SQLITEURL)
+
+
+$(HOSTPYTHON) $(HOSTPGEN): $(TARBALL)
+	mkdir -p $(HOSTINSTALL)
+	[ -d $(HOSTBUILD) ] || tar -C $(HOSTINSTALL) -xf $(TARBALL)
+	( \
+		cd $(HOSTBUILD); \
+		./configure --prefix=$(HOSTINSTALL) || cat config.log && \
+	  make regen-grammar && \
+		make install && \
+		cp Parser/pgen$(EXE) $(HOSTINSTALL)/bin/ && \
+		make distclean \
+	)
+
+
+$(BUILD)/.patched: $(TARBALL)
+	[ -d $(BUILD) ] || (mkdir -p $(dir $(BUILD)); tar -C $(dir $(BUILD)) -xf $(TARBALL))
+	cat patches/*.patch | (cd $(BUILD) ; patch -p1)
+	touch $@
+
+
+$(ZLIBBUILD)/.patched: $(ZLIBTARBALL)
+	[ -d $(ROOT)/build ] || (mkdir $(ROOT)/build)
+	tar -C $(ROOT)/build/ -xf $(ROOT)/downloads/zlib-1.2.11.tar.gz
+	cat patches/zlib/*.patch | (cd $(ZLIBBUILD) ; patch -p1)
+	touch $@
+
+
+$(SQLITEBUILD)/libsqlite3.la: $(SQLITETARBALL)
+	[ -d $(ROOT)/build ] || (mkdir $(ROOT)/build)
+	tar -C $(ROOT)/build/ -xf $(SQLITETARBALL)
+	( \
+		cd $(SQLITEBUILD); \
+		emconfigure ./configure; \
+		emmake make; \
+	)
+
+
+$(BUILD)/Makefile: $(BUILD)/.patched $(ZLIBBUILD)/.patched $(ZLIBWASM)
 	cp config.site $(BUILD)/
 	( \
 		cd $(BUILD); \
@@ -81,75 +116,30 @@ $(BUILD)/Makefile:
 		CONFIG_SITE=./config.site \
 		READELF=true \
 		./configure \
-		 --without-pymalloc \
-		 --disable-shared \
-		 --disable-ipv6 \
-		 --without-gcc \
-		 --host=$(WASM_TRIPLE) \
-		 --build=$(WASM_BUILD) \
-		 --prefix=$(INSTALL) ; \
+		--without-pymalloc \
+		--disable-shared \
+		--disable-ipv6 \
+		--without-gcc \
+		--host=$(WASM_TRIPLE) \
+		--build=$(WASM_BUILD) \
+		--prefix=$(INSTALL) ; \
 	)
 
-# Build core
-$(BUILD)/$(LIB): $(BUILD)/Makefile Setup.local
+
+$(BUILD)/$(LIB): $(BUILD)/Makefile $(HOSTPYTHON) $(HOSTPGEN) Setup.local
 	cp Setup.local $(BUILD)/Modules/
 	cat pyconfig.undefs.h >> $(BUILD)/pyconfig.h
 	( \
-		cp build/$(PYVERSION)/host/lib/python$(PYMINOR)/`$(HOSTPYTHON) -c "import sysconfig; print(sysconfig._get_sysconfigdata_name())"`.py build/$(PYVERSION)/Python-$(PYVERSION)/Lib/_sysconfigdata__wasm_.py; \
+		cp build/$(PYVERSION)/host/lib/python$(PYMINOR)/`$(HOSTPYTHON) -c "import sysconfig; print(sysconfig._get_sysconfigdata_name())"`.py build/$(PYVERSION)/Python-$(PYVERSION)/Lib/_sysconfigdata__emscripten_.py; \
 		cd $(BUILD); \
 		make -j 3 HOSTPYTHON=$(HOSTPYTHON) HOSTPGEN=$(HOSTPGEN) CROSS_COMPILE=yes $(LIB) \
 	)
 	touch $(BUILD)/$(LIB)
 
-# ----------------------------------
-# DOWNLOAD SOURCE AND DO HOST BUILD (RUN ONCE)
-# ----------------------------------
-
-$(TARBALL):
-	[ -d $(ROOT)/downloads ] || mkdir $(ROOT)/downloads
-	wget -q -O $@ $(URL)
-	md5sum --quiet --check checksums || (rm $@; false)
-
-$(HOSTPYTHON) $(HOSTPGEN): $(TARBALL)
-	mkdir -p $(HOSTINSTALL)
-	[ -d $(HOSTBUILD) ] || tar -C $(HOSTINSTALL) -xf $(TARBALL)
-	( \
-		cd $(HOSTBUILD); \
-		./configure --prefix=$(HOSTINSTALL) || cat config.log && \
-	  make regen-grammar && \
-		make install && \
-		cp Parser/pgen$(EXE) $(HOSTINSTALL)/bin/ && \
-		make distclean \
-	)
-
-# Patches the downloaded code
-$(BUILD)/.patched: $(TARBALL)
-	[ -d $(BUILD) ] || (mkdir -p $(dir $(BUILD)); tar -C $(dir $(BUILD)) -xf $(TARBALL))
-	cat patches/*.patch | (cd $(BUILD) ; patch -p1)
-	touch $@
-
-# ----------------------------------
-# ZLIB HOST
-# ----------------------------------
-
-$(ZLIBTARBALL):
-	[ -d $(ROOT)/downloads ] || mkdir $(ROOT)/downloads
-	wget -q -O $@ $(ZLIBURL)
-
-
-$(ZLIBBUILD)/.patched: $(ZLIBTARBALL)
-	[ -d $(ROOT)/build ] || (mkdir $(ROOT)/build)
-	tar -C $(ROOT)/build/ -xf $(ROOT)/downloads/zlib-1.2.11.tar.gz
-	cat patches/zlib/*.patch | (cd $(ZLIBBUILD) ; patch -p1)
-	touch $@
-
-# ----------------------------------
-# ZLIB WASM
-# ----------------------------------
 
 $(ZLIBWASM): $(ZLIBBUILD)/.patched
 	[ -d $(ROOT)/build/zlib-wasm ] || (mkdir -p $(ROOT)/build/zlib-wasm)
-	tar -C $(ROOT)/build/zlib-wasm -xf $(ROOT)/downloads/zlib-1.2.11.tar.gz
+	tar -C $(ROOT)/build/zlib-wasm -xf $(ROOT)/downloads/$(ZLIBVERSION).tar.gz
 	( \
 		cd $(ZLIBWASMBUILD); \
 		CC=$(WASM_CC) \
