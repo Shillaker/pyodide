@@ -1,0 +1,53 @@
+From 7ebdf2ded6e8a26caea60974e20acf25819ba432 Mon Sep 17 00:00:00 2001
+From: Simon Shillaker <mail@simonshillaker.com>
+Date: Wed, 15 May 2019 12:49:08 +0100
+Subject: [PATCH] Error codes
+
+---
+ dulwich/object_store.py | 2 +-
+ dulwich/refs.py         | 2 +-
+ dulwich/repo.py         | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/dulwich/object_store.py b/dulwich/object_store.py
+index 0059e60..09eb4a6 100644
+--- a/dulwich/object_store.py
++++ b/dulwich/object_store.py
+@@ -607,7 +607,7 @@ class DiskObjectStore(PackBasedObjectStore):
+         try:
+             return ShaFile.from_path(path)
+         except (OSError, IOError) as e:
+-            if e.errno == errno.ENOENT:
++            if e.errno in (errno.ENOENT, errno.EPERM):
+                 return None
+             raise
+ 
+diff --git a/dulwich/refs.py b/dulwich/refs.py
+index 008b30f..4984c69 100644
+--- a/dulwich/refs.py
++++ b/dulwich/refs.py
+@@ -628,7 +628,7 @@ class DiskRefsContainer(RefsContainer):
+                     # Read only the first 40 bytes
+                     return header + f.read(40 - len(SYMREF))
+         except IOError as e:
+-            if e.errno in (errno.ENOENT, errno.EISDIR, errno.ENOTDIR):
++            if e.errno in (errno.ENOENT, errno.EISDIR, errno.ENOTDIR, errno.EPERM):
+                 return None
+             raise
+ 
+diff --git a/dulwich/repo.py b/dulwich/repo.py
+index 7ebeec8..db8c16b 100644
+--- a/dulwich/repo.py
++++ b/dulwich/repo.py
+@@ -1014,7 +1014,7 @@ class Repo(BaseRepo):
+         try:
+             return open(os.path.join(basedir, path), 'rb')
+         except (IOError, OSError) as e:
+-            if e.errno == errno.ENOENT:
++            if e.errno in (errno.ENOENT, errno.EPERM):
+                 return None
+             raise
+ 
+-- 
+2.17.1
+
