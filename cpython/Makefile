@@ -8,11 +8,14 @@ HOSTBUILD=$(HOSTINSTALL)/Python-$(PYVERSION)
 HOSTPYTHON=$(HOSTINSTALL)/bin/python3$(EXE)
 HOSTPGEN=$(HOSTINSTALL)/bin/pgen$(EXE)
 
+# Note: ABIFLAGS differs depending on the type of build you're running. For debug it'll 
+# be "d" and using pymalloc it'll be "m". 
+ABIFLAGS=m
 BUILD=$(ROOT)/build/$(PYVERSION)/Python-$(PYVERSION)
 INSTALL=$(ROOT)/installs/python-$(PYVERSION)
 TARBALL=$(ROOT)/downloads/Python-$(PYVERSION).tgz
 URL=https://www.python.org/ftp/python/$(PYVERSION)/Python-$(PYVERSION).tgz
-LIB=libpython$(PYMINOR).a
+LIB=libpython$(PYMINOR)$(ABIFLAGS).a
 
 ZLIBVERSION=zlib-1.2.11
 ZLIBTARBALL=$(ROOT)/downloads/$(ZLIBVERSION).tar.gz
@@ -120,7 +123,6 @@ $(BUILD)/Makefile: $(BUILD)/.patched $(ZLIBBUILD)/.patched $(ZLIBWASMINSTALL)
 		CONFIG_SITE=./config.site \
 		READELF=true \
 		./configure \
-		--without-pymalloc \
 		--disable-shared \
 		--disable-ipv6 \
 		--without-gcc \
