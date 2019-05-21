@@ -8,7 +8,7 @@ CPYTHON_INCLUDE = CPYTHON_INSTALL / 'include' / 'python3.7m'
 CPYTHON_STATIC_LIB = CPYTHON_INSTALL / 'lib' / 'libpython3.7m.a'
 CPYTHON_HOST_BUILD = CPYTHON_ROOT / 'build' / '3.7.0' / 'host'
 
-SYSROOT = PYODIDE_ROOT / 'emsdk' / 'emsdk' / 'upstream' / 'latest' / 'sysroot'
+SYSROOT = Path('/usr/local/faasm/emsdk/upstream/latest/sysroot')
 
 ROOTDIR = PYODIDE_ROOT / 'tools'
 HOSTPYTHON = CPYTHON_HOST_BUILD

@@ -9,8 +9,8 @@ CXXFLAGS=
 CPP=cpp
 
 # Toolchain
-WASM_BIN=/usr/local/code/faasm/pyodide/emsdk/emsdk/upstream/latest/bin
-source /usr/local/code/faasm/pyodide/emsdk/emsdk/emsdk_env.sh
+WASM_BIN=/usr/local/faasm/emsdk/upstream/latest/bin
+source /usr/local/faasm/emsdk/emsdk_env.sh
 echo "PATH += ${WASM_BIN}"
 export PATH=${WASM_BIN}:${PATH}
 

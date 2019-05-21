@@ -1,6 +1,6 @@
 export EMCC_WASM_BACKEND=1
 
-export EMCC_ROOT=$(PYODIDE_ROOT)/emsdk/emsdk/upstream/latest
+export EMCC_ROOT=/usr/local/faasm/emsdk/upstream/latest
 export EMCC_BIN=$(EMCC_ROOT)/bin
 
 export WASM_TRIPLE=wasm32-unknown-wasm
