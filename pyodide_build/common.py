@@ -25,7 +25,7 @@ TARGETPYTHON = CPYTHON_INSTALL
 DEFAULTCFLAGS = ' '.join([
     '--sysroot={}'.format(SYSROOT),
     '-I {}'.format(CPYTHON_INCLUDE),
-    '-D__WASM__=1',
+    '-DWASM_BUILD=1',
     '-nostdlib',
     '-nostdlib++',
 ])

@@ -6,7 +6,7 @@ index 35869c81ac..1af4ead7f5 100644
  static int
  set_inheritable(int fd, int inheritable, int raise, int *atomic_flag_works)
  {
-+#ifdef EMSCRIPTEN
++#ifdef WASM_BUILD
 +    return 0;
 +#else
  #ifdef MS_WINDOWS
