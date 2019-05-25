@@ -37,8 +37,9 @@ def build_packages(packagesdir, outputdir, args):
         'dulwich',
         'genshi',
         'numpy',
-        'performance',
         'perf',
+        'performance',
+        'pyaes',
         'six',
     ]
 
