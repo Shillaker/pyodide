@@ -1,0 +1,13 @@
+diff --git a/Modules/posixmodule.c b/Modules/posixmodule.c
+index eaefafd..b74bf13 100644
+--- a/Modules/posixmodule.c
++++ b/Modules/posixmodule.c
+@@ -3526,7 +3526,7 @@ exit:
+ }  /* end of _listdir_windows_no_opendir */
+ 
+ #else  /* thus POSIX, ie: not (MS_WINDOWS and not HAVE_OPENDIR) */
+-
++__attribute__((noinline))
+ static PyObject *
+ _posix_listdir(path_t *path, PyObject *list)
+ {
