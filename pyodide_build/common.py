@@ -4,8 +4,8 @@ PYODIDE_ROOT = Path(__file__).parents[1].resolve()
 
 CPYTHON_ROOT = PYODIDE_ROOT / 'cpython'
 CPYTHON_INSTALL = CPYTHON_ROOT / 'installs' / 'python-3.7.0'
-CPYTHON_INCLUDE = CPYTHON_INSTALL / 'include' / 'python3.7m'
-CPYTHON_STATIC_LIB = CPYTHON_INSTALL / 'lib' / 'libpython3.7m.a'
+CPYTHON_INCLUDE = CPYTHON_INSTALL / 'include' / 'python3.7'
+CPYTHON_STATIC_LIB = CPYTHON_INSTALL / 'lib' / 'libpython3.7.a'
 CPYTHON_HOST_BUILD = CPYTHON_ROOT / 'build' / '3.7.0' / 'host'
 
 SYSROOT = Path('/usr/local/faasm/emsdk/upstream/latest/sysroot')
