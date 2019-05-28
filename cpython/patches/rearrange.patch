@@ -1,0 +1,26 @@
+diff --git a/Modules/posixmodule.c b/Modules/posixmodule.c
+index 7391ba9..eaefafd 100644
+--- a/Modules/posixmodule.c
++++ b/Modules/posixmodule.c
+@@ -3538,6 +3538,10 @@ _posix_listdir(path_t *path, PyObject *list)
+     int fd = -1;
+ #endif
+ 
++    if ((list = PyList_New(0)) == NULL) {
++        goto exit;
++    }
++
+     errno = 0;
+ #ifdef HAVE_FDOPENDIR
+     if (path->fd != -1) {
+@@ -3576,9 +3580,7 @@ _posix_listdir(path_t *path, PyObject *list)
+ #endif
+         goto exit;
+     }
+-    if ((list = PyList_New(0)) == NULL) {
+-        goto exit;
+-    }
++
+     for (;;) {
+         errno = 0;
+         ep = readdir(dirp);
