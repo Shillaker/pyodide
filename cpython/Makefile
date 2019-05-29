@@ -10,7 +10,7 @@ HOSTPGEN=$(HOSTINSTALL)/bin/pgen$(EXE)
 
 # Note: ABIFLAGS differs depending on the type of build you're running. For debug it'll 
 # be "d" and using pymalloc it'll be "m". If not using pymalloc it'll be empty 
-ABIFLAGS=
+ABIFLAGS=m
 BUILD=$(ROOT)/build/$(PYVERSION)/Python-$(PYVERSION)
 INSTALL=$(ROOT)/installs/python-$(PYVERSION)
 TARBALL=$(ROOT)/downloads/Python-$(PYVERSION).tgz
@@ -123,7 +123,6 @@ $(BUILD)/Makefile: $(BUILD)/.patched $(ZLIBBUILD)/.patched $(ZLIBWASMINSTALL)
 		CONFIG_SITE=./config.site \
 		READELF=true \
 		./configure \
-		--without-pymalloc \
 		--disable-shared \
 		--disable-ipv6 \
 		--without-gcc \
