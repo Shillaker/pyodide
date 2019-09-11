@@ -218,21 +218,21 @@ def handle_command(line, args, dryrun=False):
         if result is None:
             return
         line = result
-        new_args = ['wasm32-clang']
+        new_args = ['clang']
     elif line[0] == 'ar':
         new_args = ['llvm-ar']
     elif line[0] == 'c++':
-        new_args = ['wasm32-clang++']
+        new_args = ['clang++']
     else:
-        new_args = ['wasm32-clang']
+        new_args = ['clang']
         # distutils doesn't use the c++ compiler when compiling c++ <sigh>
         if any(arg.endswith('.cpp') for arg in line):
-            new_args = ['wasm32-clang++']
+            new_args = ['clang++']
     shared = '-shared' in line
 
     if shared:
         new_args.extend(args.ldflags.split())
-    elif new_args[0] in ('wasm32-clang', 'wasm32-clang++'):
+    elif new_args[0] in ('clang', 'clang++'):
         new_args.extend(args.cflags.split())
 
     lapack_dir = None

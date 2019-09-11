@@ -1,5 +1,7 @@
 PYODIDE_ROOT=$(abspath ..)
+PROJ_ROOT=$(PYODIDE_ROOT)/..
 include ../Makefile.envs
+include $(PROJ_ROOT)/toolchain/Makefile.envs
 
 ROOT=$(abspath .)
 
@@ -126,7 +128,7 @@ $(BUILD)/Makefile: $(BUILD)/.patched $(ZLIBBUILD)/.patched $(ZLIBWASMINSTALL)
 		--disable-shared \
 		--disable-ipv6 \
 		--without-gcc \
-		--host=$(WASM_TRIPLE) \
+		--host=$(WASM_HOST) \
 		--build=$(WASM_BUILD) \
 		--prefix=$(INSTALL) ; \
 	)

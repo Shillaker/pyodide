@@ -1,20 +1,3 @@
-export EMCC_WASM_BACKEND=1
-
-export EMCC_ROOT=/usr/local/faasm/emsdk/upstream/latest
-export EMCC_BIN=$(EMCC_ROOT)/bin
-
-export WASM_TRIPLE=wasm32-unknown-wasm
-export WASM_BUILD=wasm32
-
-export WASM_CC=$(EMCC_BIN)/wasm32-clang
-export WASM_CXX=$(EMCC_BIN)/wasm32-clang++
-export WASM_AR=$(EMCC_BIN)/llvm-ar
-export WASM_RANLIB=$(EMCC_BIN)/llvm-ranlib
-export WASM_SYSROOT=$(EMCC_ROOT)/sysroot
-export WASM_LDSHARED=$(EMCC_BIN)/wasm-ld
-export WASM_CFLAGS=--sysroot=$(WASM_SYSROOT) -ldlmalloc
-export WASM_CPPFLAGS=-DWASM_BUILD=1 -DHAVE_UNSETENV=1 -DHAVE_PUTENV=1 -DHAVE_TIMEGM=1 -DHAVE_FORK=1
-
 export PYVERSION=3.7.0
 export PYMINOR=$(basename $(PYVERSION))
 export HOSTPYTHONROOT=$(PYODIDE_ROOT)/cpython/build/$(PYVERSION)/host
@@ -24,3 +7,5 @@ export PYTHONINCLUDE=$(PYODIDE_ROOT)/cpython/installs/python-$(PYVERSION)/includ
 
 export PYODIDE_PACKAGE_ABI=1
 
+export WASM_CPPFLAGS=-DWASM_BUILD=1 -DHAVE_UNSETENV=1 -DHAVE_PUTENV=1 -DHAVE_TIMEGM=1 -DHAVE_FORK=1
+export WASM_BUILD=wasm32
