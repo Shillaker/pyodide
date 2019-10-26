@@ -344,7 +344,7 @@ def install_for_distribution(args):
          'install',
          '--skip-build',
          '--prefix=install',
-         '--old-and-unmanageable'
+         # '--old-and-unmanageable'
          ]
     try:
         subprocess.check_call(commands)
