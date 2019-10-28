@@ -24,6 +24,7 @@ TARGETPYTHON = CPYTHON_INSTALL
 #
 DEFAULTCFLAGS = ' '.join([
     '--sysroot={}'.format(SYSROOT),
+    '-O3 -msimd128',
     '-I {}'.format(CPYTHON_INCLUDE),
     '--target=wasm32-unknown-emscripten',
     '-DWASM_BUILD=1',
