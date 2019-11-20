@@ -40,7 +40,7 @@ def build_packages(packagesdir, outputdir, args):
         'perf',
         'performance',
         'pyaes',
-        'pfaasm',
+        'pyfaasm',
         'six',
     ]
 
