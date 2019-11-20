@@ -11,7 +11,7 @@ HOSTPYTHON=$(HOSTINSTALL)/bin/python3$(EXE)
 HOSTPGEN=$(HOSTINSTALL)/bin/pgen$(EXE)
 
 # Note: ABIFLAGS differs depending on the type of build you're running. For debug it'll 
-# be "d" and using pymalloc it'll be "m". If not using pymalloc it'll be empty 
+# be "d" and using pymalloc it'll be "m". If not using pymalloc it'll be empty.
 ABIFLAGS=m
 BUILD=$(ROOT)/build/$(PYVERSION)/Python-$(PYVERSION)
 INSTALL=$(ROOT)/installs/python-$(PYVERSION)
