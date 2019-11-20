@@ -213,26 +213,31 @@ def handle_command(line, args, dryrun=False):
         if arg.startswith('/tmp'):
             return
 
+    cc = os.environ["WASM_CC"]
+    ar = os.environ["WASM_AR"]
+    cxx = os.environ["WASM_CXX"]
+
     if line[0] == 'gfortran':
         result = f2c(line)
         if result is None:
             return
         line = result
-        new_args = ['clang']
+        new_args = [cc]
     elif line[0] == 'ar':
-        new_args = ['llvm-ar']
+        new_args = [ar]
     elif line[0] == 'c++':
-        new_args = ['clang++']
+        new_args = [cxx]
     else:
-        new_args = ['clang']
+        new_args = [cc]
         # distutils doesn't use the c++ compiler when compiling c++ <sigh>
         if any(arg.endswith('.cpp') for arg in line):
-            new_args = ['clang++']
+            new_args = [cxx]
+
     shared = '-shared' in line
 
     if shared:
         new_args.extend(args.ldflags.split())
-    elif new_args[0] in ('clang', 'clang++'):
+    elif new_args[0] in (cc, cxx):
         new_args.extend(args.cflags.split())
 
     lapack_dir = None
