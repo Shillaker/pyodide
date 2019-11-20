@@ -1,9 +1,9 @@
 package:
   name: pyfaasm
-  version: 0.1.5
+  version: 0.1.6
 source:
-  sha256: 31bc40bf98673f7e9e5a958933857d947ba633f7791820e3c9dadec80ad3fd4e
-  url: https://files.pythonhosted.org/packages/2a/65/f6995f4a45e0f87c014c6eeaa4aaded4eb47b7a8fc34070a9dcc41d59489/pyfaasm-0.1.5.tar.gz
+  sha256: ba6d480c21777a146c4d2b336a6d2fbaf030cbb90a7d52fa66cea28611447669
+  url: https://files.pythonhosted.org/packages/5a/a8/6be0a4f27b09222924876ad59f8c606a8f731a5150ba9ddf2fb587eb7acf/pyfaasm-0.1.6.tar.gz
 test:
   imports:
   - pyfaasm
