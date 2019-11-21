@@ -1,0 +1,103 @@
+diff --git a/numpy/distutils/system_info.py b/numpy/distutils/system_info.py
+index 49620a9..a3f6317 100755
+--- a/numpy/distutils/system_info.py
++++ b/numpy/distutils/system_info.py
+@@ -1338,7 +1338,7 @@ class lapack_src_info(system_info):
+         src_dirs = self.get_src_dirs()
+         src_dir = ''
+         for d in src_dirs:
+-            if os.path.isfile(os.path.join(d, 'dgesv.f')):
++            if os.path.isfile(os.path.join(d, 'dgesv.c')):
+                 src_dir = d
+                 break
+         if not src_dir:
+@@ -1350,7 +1350,7 @@ class lapack_src_info(system_info):
+         allaux = '''
+         ilaenv ieeeck lsame lsamen xerbla
+         iparmq
+-        '''  # *.f
++        '''  # *.c
+         laux = '''
+         bdsdc bdsqr disna labad lacpy ladiv lae2 laebz laed0 laed1
+         laed2 laed3 laed4 laed5 laed6 laed7 laed8 laed9 laeda laev2
+@@ -1362,7 +1362,7 @@ class lapack_src_info(system_info):
+ 
+         larra larrc larrd larr larrk larrj larrr laneg laisnan isnan
+         lazq3 lazq4
+-        '''  # [s|d]*.f
++        '''  # [s|d]*.c
+         lasrc = '''
+         gbbrd gbcon gbequ gbrfs gbsv gbsvx gbtf2 gbtrf gbtrs gebak
+         gebal gebd2 gebrd gecon geequ gees geesx geev geevx gegs gegv
+@@ -1387,7 +1387,7 @@ class lapack_src_info(system_info):
+         tzrqf tzrzf
+ 
+         lacn2 lahr2 stemr laqr0 laqr1 laqr2 laqr3 laqr4 laqr5
+-        '''  # [s|c|d|z]*.f
++        '''  # [s|c|d|z]*.c
+         sd_lasrc = '''
+         laexc lag2 lagv2 laln2 lanv2 laqtr lasy2 opgtr opmtr org2l
+         org2r orgbr orghr orgl2 orglq orgql orgqr orgr2 orgrq orgtr
+@@ -1396,7 +1396,7 @@ class lapack_src_info(system_info):
+         sbtrd spev spevd spevx spgst spgv spgvd spgvx sptrd stev stevd
+         stevr stevx syev syevd syevr syevx sygs2 sygst sygv sygvd
+         sygvx sytd2 sytrd
+-        '''  # [s|d]*.f
++        '''  # [s|d]*.c
+         cz_lasrc = '''
+         bdsqr hbev hbevd hbevx hbgst hbgv hbgvd hbgvx hbtrd hecon heev
+         heevd heevr heevx hegs2 hegst hegv hegvd hegvx herfs hesv
+@@ -1408,34 +1408,34 @@ class lapack_src_info(system_info):
+         spr stedc steqr symv syr ung2l ung2r ungbr unghr ungl2 unglq
+         ungql ungqr ungr2 ungrq ungtr unm2l unm2r unmbr unmhr unml2
+         unmlq unmql unmqr unmr2 unmr3 unmrq unmrz unmtr upgtr upmtr
+-        '''  # [c|z]*.f
++        '''  # [c|z]*.c
+         #######
+-        sclaux = laux + ' econd '                  # s*.f
+-        dzlaux = laux + ' secnd '                  # d*.f
+-        slasrc = lasrc + sd_lasrc                  # s*.f
+-        dlasrc = lasrc + sd_lasrc                  # d*.f
+-        clasrc = lasrc + cz_lasrc + ' srot srscl '  # c*.f
+-        zlasrc = lasrc + cz_lasrc + ' drot drscl '  # z*.f
+-        oclasrc = ' icmax1 scsum1 '                # *.f
+-        ozlasrc = ' izmax1 dzsum1 '                # *.f
+-        sources = ['s%s.f' % f for f in (sclaux + slasrc).split()] \
+-                  + ['d%s.f' % f for f in (dzlaux + dlasrc).split()] \
+-                  + ['c%s.f' % f for f in (clasrc).split()] \
+-                  + ['z%s.f' % f for f in (zlasrc).split()] \
+-                  + ['%s.f' % f for f in (allaux + oclasrc + ozlasrc).split()]
++        sclaux = laux + ' econd '                  # s*.c
++        dzlaux = laux + ' secnd '                  # d*.c
++        slasrc = lasrc + sd_lasrc                  # s*.c
++        dlasrc = lasrc + sd_lasrc                  # d*.c
++        clasrc = lasrc + cz_lasrc + ' srot srscl '  # c*.c
++        zlasrc = lasrc + cz_lasrc + ' drot drscl '  # z*.c
++        oclasrc = ' icmax1 scsum1 '                # *.c
++        ozlasrc = ' izmax1 dzsum1 '                # *.c
++        sources = ['s%s.c' % f for f in (sclaux + slasrc).split()] \
++                  + ['d%s.c' % f for f in (dzlaux + dlasrc).split()] \
++                  + ['c%s.c' % f for f in (clasrc).split()] \
++                  + ['z%s.c' % f for f in (zlasrc).split()] \
++                  + ['%s.c' % f for f in (allaux + oclasrc + ozlasrc).split()]
+         sources = [os.path.join(src_dir, f) for f in sources]
+         # Lapack 3.1:
+         src_dir2 = os.path.join(src_dir, '..', 'INSTALL')
+-        sources += [os.path.join(src_dir2, p + 'lamch.f') for p in 'sdcz']
++        sources += [os.path.join(src_dir2, p + 'lamch.c') for p in 'sdcz']
+         # Lapack 3.2.1:
+-        sources += [os.path.join(src_dir, p + 'larfp.f') for p in 'sdcz']
+-        sources += [os.path.join(src_dir, 'ila' + p + 'lr.f') for p in 'sdcz']
+-        sources += [os.path.join(src_dir, 'ila' + p + 'lc.f') for p in 'sdcz']
++        sources += [os.path.join(src_dir, p + 'larfp.c') for p in 'sdcz']
++        sources += [os.path.join(src_dir, 'ila' + p + 'lr.c') for p in 'sdcz']
++        sources += [os.path.join(src_dir, 'ila' + p + 'lc.c') for p in 'sdcz']
+         # Should we check here actual existence of source files?
+         # Yes, the file listing is different between 3.0 and 3.1
+         # versions.
+         sources = [f for f in sources if os.path.isfile(f)]
+-        info = {'sources': sources, 'language': 'f77'}
++        info = {'sources': sources, 'language': 'c'}
+         self.set_info(**info)
+ 
+ atlas_version_c_text = r'''

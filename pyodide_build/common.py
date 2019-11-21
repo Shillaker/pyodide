@@ -8,6 +8,8 @@ CPYTHON_INCLUDE = CPYTHON_INSTALL / 'include' / 'python3.7m'
 CPYTHON_STATIC_LIB = CPYTHON_INSTALL / 'lib' / 'libpython3.7m.a'
 CPYTHON_HOST_BUILD = CPYTHON_ROOT / 'build' / '3.7.0' / 'host'
 
+LAPACK_SRC = PYODIDE_ROOT / 'CLAPACK' / 'CLAPACK-WA' / 'SRC'
+
 SYSROOT = Path('/usr/local/faasm/llvm-sysroot')
 
 ROOTDIR = PYODIDE_ROOT / 'tools'

@@ -23,7 +23,6 @@ only reliable way to automatically build a package that interleaves
 configuration with build.
 """
 
-
 import argparse
 import importlib.machinery
 import json
@@ -33,11 +32,9 @@ import re
 import subprocess
 import sys
 
-
 # absolute import is necessary as this file will be symlinked
 # under tools
 from pyodide_build import common
-
 
 ROOTDIR = common.ROOTDIR
 symlinks = set(['cc', 'c++', 'ld', 'ar', 'gcc', 'gfortran'])
@@ -60,6 +57,8 @@ def collect_args(basename):
     env['PATH'] = path
 
     skip_host = 'SKIP_HOST' in os.environ
+
+    env['LAPACK_SRC'] = common.LAPACK_SRC
 
     # Skip compilations of C/Fortran extensions for the target environement.
     # We still need to generate the output files for distutils to continue
@@ -120,6 +119,7 @@ def capture_compile(args):
     env = dict(os.environ)
     make_symlinks(env)
     env['PATH'] = str(ROOTDIR) + ':' + os.environ['PATH']
+    env['LAPACK_SRC'] = common.LAPACK_SRC
 
     result = subprocess.run(
         [Path(args.host) / 'bin' / 'python3',
@@ -344,13 +344,13 @@ def clean_out_native_artifacts():
 
 def install_for_distribution(args):
     commands = [
-         Path(args.host) / 'bin' / 'python3',
-         'setup.py',
-         'install',
-         '--skip-build',
-         '--prefix=install',
-         '--old-and-unmanageable'
-         ]
+        Path(args.host) / 'bin' / 'python3',
+        'setup.py',
+        'install',
+        '--skip-build',
+        '--prefix=install',
+        '--old-and-unmanageable'
+    ]
     try:
         subprocess.check_call(commands)
     except Exception:
