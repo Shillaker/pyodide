@@ -17,6 +17,7 @@ source:
     - patches/force_malloc.patch
     - patches/init-alloc-cache.patch
     - patches/fix-install-with-skip-build.patch
+    - patches/use-local-blas-lapack.patch
 
 build:
   skip_host: False
