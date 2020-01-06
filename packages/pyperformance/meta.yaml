@@ -1,0 +1,6 @@
+package:
+  name: pyperformance
+  version: 1.0.0
+source:
+  sha256: 3aaaf52c6333e5d9275ec44040cda527b441318fe3866911339a59858fca3d90 
+  url: https://files.pythonhosted.org/packages/59/7b/ca376edf80eed6e23081c9383836f3150ff6ce4d781e9947de64d2424bb6/pyperformance-1.0.0.tar.gz

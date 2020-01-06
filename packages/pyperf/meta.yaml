@@ -1,0 +1,7 @@
+package:
+  name: pyperf
+  version: 1.7.0
+source:
+  sha256: 0d214aa65e085d3e4108a36152cb12f7cd0f4e7fda93b5134b43a9687c975786
+  url: https://files.pythonhosted.org/packages/04/6a/8efd2be0f883e5cef006db69e14224b49b2df57633b759ee5c8fee9f3017/pyperf-1.7.0.tar.gz
+ 
