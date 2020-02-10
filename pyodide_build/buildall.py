@@ -39,6 +39,7 @@ def build_packages(packagesdir, outputdir, args):
         'numpy',
         'perf',
         'performance',
+        'pyperformance',
         'pyaes',
         'pyfaasm',
         'six',
