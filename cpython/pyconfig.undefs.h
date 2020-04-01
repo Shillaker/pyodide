@@ -30,10 +30,13 @@
 /* Unsupported functionality */
 #undef HAVE_PTHREAD_H
 
-/* Groups not support */
+/* Groups not supported */
 #undef HAVE_GETGROUPLIST
 #undef HAVE_GETGROUPS
 #undef HAVE_SETGROUPS
+
+/* Device macros not supported */
+#undef HAVE_DEVICE_MACROS
 
 #define CONFIG_32
 #define ANSI
