@@ -28,6 +28,8 @@ DEFAULTCFLAGS = ' '.join([
     '--sysroot={}'.format(SYSROOT),
     '-O3 -msimd128',
     '-I {}'.format(CPYTHON_INCLUDE),
+    '-D__wasi__',
+    '-D__faasm',
     '--target=wasm32-unknown-emscripten',
     '-DWASM_BUILD=1',
     '-nostdlib',
