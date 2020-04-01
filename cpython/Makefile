@@ -32,8 +32,8 @@ SQLITETARBALL=$(ROOT)/downloads/sqlite-autoconf-3270200.tar.gz
 SQLITEBUILD=$(ROOT)/build/sqlite-autoconf-3270200
 SQLITEURL=https://www.sqlite.org/2019/sqlite-autoconf-3270200.tar.gz
 
-THIS_CFLAGS="$(WASM_CFLAGS_NO_QUOTES) -ldlmalloc"
-THIS_CXXFLAGS="$(WASM_CXXFLAGS_NO_QUOTES) -ldlmalloc"
+THIS_CFLAGS="$(WASM_CFLAGS_NO_QUOTES)"
+THIS_CXXFLAGS="$(WASM_CXXFLAGS_NO_QUOTES)"
 
 all: $(INSTALL)/lib/$(LIB)
 

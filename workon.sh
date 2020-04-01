@@ -31,4 +31,3 @@ pip install -U pip
 pip install -r requirements.txt
 
 export PS1="(pyodide) $PS1"
-

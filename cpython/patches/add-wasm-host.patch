@@ -8,7 +8,7 @@ index ba37cf99e2..d772f33065 100755
    kopensolaris*-gnu* | cloudabi*-eabi* | \
 -  storm-chaos* | os2-emx* | rtmk-nova*)
 +  storm-chaos* | os2-emx* | rtmk-nova* | \
-+  wasm)
++  wasi)
      os=-$maybe_os
      basic_machine=`echo "$1" | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\1/'`
      ;;
@@ -24,7 +24,7 @@ index ba37cf99e2..d772f33065 100755
  			;;
  		esac
  		;;
-+	-wasm)
++	-wasi)
 +		;;
  	-nacl*)
  		;;
