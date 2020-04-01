@@ -7,7 +7,7 @@ index 20f9817f4f..bcf96874c0 100755
      """ Interface to the system's uname command.
      """
 -    if sys.platform in ('dos', 'win32', 'win16'):
-+    if sys.platform in ('dos', 'win32', 'win16', 'wasm'):
++    if sys.platform in ('dos', 'win32', 'win16', 'wasi'):
          # XXX Others too ?
          return default
      try:
@@ -16,7 +16,7 @@ index 20f9817f4f..bcf96874c0 100755
  
      """
 -    if sys.platform in ('dos', 'win32', 'win16'):
-+    if sys.platform in ('dos', 'win32', 'win16', 'wasm'):
++    if sys.platform in ('dos', 'win32', 'win16', 'wasi'):
          # XXX Others too ?
          return default
      target = _follow_symlinks(target)

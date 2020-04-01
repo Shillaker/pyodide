@@ -53,6 +53,9 @@ $(INSTALL)/lib/$(LIB): $(BUILD)/$(LIB)
 		sed -i -e 's#'"$(PYODIDE_ROOT)"'##g' $(INSTALL)/lib/python$(PYMINOR)/_sysconfigdata__emscripten_.py; \
 	)
 
+clean-wasm:
+	-rm -fr $(BUILD)
+	-rm -fr $(INSTALL)
 
 clean:
 	-rm -fr $(HOSTINSTALL)

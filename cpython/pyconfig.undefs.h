@@ -30,5 +30,11 @@
 /* Unsupported functionality */
 #undef HAVE_PTHREAD_H
 
+/* Groups not support */
+#undef HAVE_GETGROUPLIST
+#undef HAVE_GETGROUPS
+#undef HAVE_SETGROUPS
+
 #define CONFIG_32
 #define ANSI
+
