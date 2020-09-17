@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Toolchain
-TOOLCHAIN_ROOT=/usr/local/code/faasm/toolchain
+TOOLCHAIN_ROOT=/usr/local/code/faasm/third-party/faasm-toolchain
 TOOLCHAIN_BIN=${TOOLCHAIN_ROOT}/install/bin
 source ${TOOLCHAIN_ROOT}/env.sh
 
